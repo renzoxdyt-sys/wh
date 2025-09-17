@@ -1,371 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Wehold — Inversión directa en compañías</title>
-  <meta name="description" content="Wehold — Accede a participaciones reales en empresas con transparencia, liquidez y comisiones alineadas a resultados.">
-  <link rel="icon" href="/favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <!-- GSAP + ScrollTrigger + Lenis (CDN) -->
-  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.31/bundled/lenis.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wehold</title>
+  <!-- Montserrat Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    /* Wehold brand palette (Pantone + values provided)
-       Burgundy (Pantone 1955 C)   -> #7A1523
-       Midnight Blue (Pantone 2767 C) -> #0A1F44
-       Blue Steel (Pantone 429 C) -> #B0B7C3
-       White -> #FFFFFF
-       Black -> #000000
-    */
-    :root{
-      --burgundy: #7A1523; /* RGB 122-21-35 */
-      --midnight: #0A1F44; /* RGB 10-31-68 */
-      --bluesteel: #B0B7C3; /* RGB 176-183-195 */
+    :root {
+      --burgundy: #7A1523;
+      --midnight-blue: #0A1F44;
+      --blue-steel: #B0B7C3;
       --white: #FFFFFF;
       --black: #000000;
-
-      /* derived */
-      --bg: var(--white);
-      --text: var(--midnight);
-      --muted: #6b7280;
-      --accent: var(--burgundy);
-      --accent-2: var(--midnight);
-
-      --container:1180px;
-      --radius:14px;
-      --ease:cubic-bezier(.2,.9,.2,1);
     }
 
-    *{box-sizing:border-box}
-    html,body,#root{height:100%}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;transition:background .6s var(--ease),color .6s var(--ease)}
-    a{text-decoration:none;color:inherit}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    .site{min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
-    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:120;padding:0 20px}
-    .nav{max-width:var(--container);margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
-    .logo{display:flex;align-items:center;gap:12px;font-weight:800}
-    .mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(180deg,var(--burgundy),var(--midnight));box-shadow:0 8px 30px rgba(10,31,68,0.12)}
-    nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{font-weight:600;font-size:15px;color:var(--text);opacity:.95;padding:8px 12px;border-radius:8px}
-    nav a.active{background:rgba(10,31,68,0.06)}
-    .actions{display:flex;gap:12px;align-items:center}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(10,31,68,0.06);background:transparent;cursor:pointer;font-weight:700}
-    .btn.primary{background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white);border:none;box-shadow:0 12px 30px rgba(122,21,35,0.08)}
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--white);
+      color: var(--midnight-blue);
+      line-height: 1.6;
+    }
 
-    /* MAIN area */
-    main{flex:1;height:100vh;overflow-y:auto;scroll-behavior:smooth}
-    section{min-height:100vh;display:flex;align-items:center;padding:100px 24px}
-    .container{max-width:var(--container);margin:0 auto;width:100%}
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background-color: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--blue-steel);
+    }
 
-    /* Hero */
-    .eyebrow{font-size:13px;color:var(--midnight);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;font-weight:600}
-    .hero h1{font-size:64px;line-height:1.02;margin:0 0 18px;font-weight:800;color:var(--midnight)}
-    .lead{max-width:62ch;font-size:18px;color:var(--bluesteel);margin-bottom:26px}
-    .hero-grid{display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:center}
-    .visual-card{border-radius:18px;padding:18px;background:linear-gradient(180deg,rgba(122,21,35,0.04),rgba(10,31,68,0.02));box-shadow:0 20px 40px rgba(10,31,68,0.06)}
+    .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--burgundy);
+    }
 
-    /* Features */
-    .features-row{display:flex;gap:18px;align-items:stretch}
-    .feature{flex:1;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(240,242,245,0.98));border:1px solid rgba(10,31,68,0.04);transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
-    .feature:hover{transform:translateY(-6px);box-shadow:0 24px 40px rgba(10,31,68,0.06)}
-    .feature h4{margin:0 0 8px;color:var(--midnight)}
-    .feature p{margin:0;color:var(--bluesteel)}
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--midnight-blue);
+      transition: color 0.3s ease;
+    }
 
-    /* Steps */
-    .how .track{display:flex;gap:18px}
-    .step{flex:1;padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);box-shadow:0 10px 30px rgba(10,31,68,0.04);text-align:center}
-    .step .num{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));display:inline-flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;margin-bottom:12px}
+    nav a:hover {
+      color: var(--burgundy);
+    }
 
-    /* Metrics (updated values) */
-    .metrics .row{display:flex;gap:16px}
-    .metric{flex:1;padding:18px;border-radius:12px;color:var(--white);background:linear-gradient(180deg,var(--midnight),rgba(10,31,68,0.85));text-align:center}
-    .metric .label{font-size:13px;color:var(--bluesteel);margin-top:6px}
+    section {
+      padding: 5rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-    /* Team */
-    .team .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .member{padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);display:flex;gap:12px;align-items:center}
-    .avatar{width:64px;height:64px;border-radius:10px;background:linear-gradient(180deg,var(--bluesteel),#eef3fb);}
+    section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
 
-    /* Cartas trimestrales */
-    #lettersList .item{padding:12px;border-radius:10px;border:1px solid rgba(10,31,68,0.04);margin-bottom:10px;background:linear-gradient(180deg,#fff,#fbfcff)}
-    #lettersList .item a{color:var(--midnight);font-weight:700}
+    section p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
 
-    .cta-band{margin:48px auto;padding:32px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white)}
+    #how-it-works {
+      background-color: var(--white);
+      color: var(--midnight-blue);
+    }
 
-    .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-    .reveal.show{opacity:1;transform:none}
+    #metrics {
+      background-color: var(--midnight-blue);
+      color: var(--white);
+      text-align: center;
+    }
 
-    @media (max-width:980px){.hero-grid{grid-template-columns:1fr}nav ul{display:none}}
-    @media (max-width:520px){.hero h1{font-size:34px}.team .grid{grid-template-columns:1fr}.features-row{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.feature{min-width:260px;scroll-snap-align:center}.cta-band{flex-direction:column;text-align:center}}
-    @media (prefers-reduced-motion: reduce){.reveal{transition:none;opacity:1;transform:none}body{transition:none}}
+    #metrics h3 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
 
+    #metrics p {
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    footer {
+      background-color: var(--black);
+      color: var(--white);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <div class="site">
-    <header id="site-header">
-      <div class="nav">
-        <div class="logo"><span class="mark" aria-hidden></span><span style="font-size:18px">Wehold</span></div>
-        <nav>
-          <ul>
-            <li><a href="#home">Inicio</a></li>
-            <li><a href="#how">Cómo funciona</a></li>
-            <li><a href="#strategy">Estrategia</a></li>
-            <li><a href="#team">Equipo</a></li>
-            <li><a href="#letters">Cartas</a></li>
-          </ul>
-        </nav>
-        <div class="actions">
-          <button class="btn" id="btn-demo">Solicitar demo</button>
-          <button class="btn primary" id="btn-start">Empieza hoy</button>
-        </div>
+  <header>
+    <div class="logo">Wehold.</div>
+    <nav>
+      <a href="#how-it-works">Cómo funciona</a>
+      <a href="#philosophy">Filosofía</a>
+      <a href="#metrics">Números</a>
+      <a href="#team">Equipo</a>
+      <a href="#letters">Cartas</a>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h2>Invertimos contigo, en lo que importa</h2>
+    <p>Wehold es un fondo que apuesta por compañías con buenos fundamentos, incluso en entornos desafiantes.</p>
+  </section>
+
+  <section id="how-it-works">
+    <h2>Cómo funciona</h2>
+    <p>Invertimos en empresas sólidas con visión a largo plazo. Nuestros inversionistas participan directamente como accionistas, manteniendo liquidez y transparencia en cada paso.</p>
+  </section>
+
+  <section id="philosophy">
+    <h2>Nuestra filosofía y estrategia</h2>
+    <p>Creemos en la inversión fundamentada en el valor. Buscamos oportunidades en mercados donde la percepción de riesgo no refleja la verdadera fortaleza de las compañías.</p>
+    <p>Nuestra estrategia se centra en identificar compañías con fundamentos sólidos y potencial de crecimiento sostenible, incluso en entornos políticos o económicos volátiles.</p>
+  </section>
+
+  <section id="metrics">
+    <h2>Nuestros números</h2>
+    <div class="metrics-grid">
+      <div>
+        <h3>+S/500,000</h3>
+        <p>Activos bajo gestión (AUM)</p>
       </div>
-    </header>
-
-    <main id="main-scroll">
-      <section id="home" data-bg="#ffffff" data-contrast="light">
-        <div class="container hero-grid">
-          <div>
-            <div class="eyebrow reveal">Wehold · Inversión directa</div>
-            <h1 class="reveal">Invirtiendo distinto.<br>Creando valor real.</h1>
-            <p class="lead reveal">Liquidez inmediata. Accionista directo. Comisiones alineadas a resultados. Transparencia en cada paso.</p>
-            <div class="hero-cta reveal" style="display:flex;gap:12px;align-items:center">
-              <button class="btn primary" id="hero-primary">Empieza hoy</button>
-              <button class="btn" id="hero-secondary">Cómo funciona</button>
-            </div>
-            <div class="subtle reveal" style="margin-top:12px;color:var(--bluesteel)">Invertir implica riesgo. <a href="#legal">Lee nuestros términos</a>.</div>
-          </div>
-          <div class="visual-card reveal" aria-hidden>
-            <div style="height:320px;border-radius:12px;background:linear-gradient(180deg,#fff,#f6fbff);display:flex;align-items:center;justify-content:center;border:1px solid rgba(10,31,68,0.04)">
-              <svg width="320" height="200" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <rect width="320" height="200" rx="12" fill="url(#g)" stroke="rgba(10,31,68,0.04)"/>
-                <path id="spark" d="M18 150 L60 110 L110 120 L160 80 L210 100 L260 60 L300 90" stroke="var(--burgundy)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5fbff"/></linearGradient></defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="features" data-bg="#f7fbff" data-contrast="light">
-        <div class="container">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-            <h3 class="reveal">Por qué Wehold</h3>
-          </div>
-          <div class="features-row">
-            <div class="feature reveal"><h4>Equity directo</h4><p>Tu capital participa en compañías reales —sin intermediarios que diluyan incentivos.</p></div>
-            <div class="feature reveal"><h4>Liquidez controlada</h4><p>Mecanismos que te permiten salida sin esperar cierres largos de fondo.</p></div>
-            <div class="feature reveal"><h4>Modelo alineado</h4><p>Cobramos por rendimiento —si y sólo si entregamos valor a tus inversiones.</p></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="how" data-bg="#0A1F44" data-contrast="dark">
-        <div class="container">
-          <h3 class="reveal" style="color:var(--white)">Cómo funciona</h3>
-          <div class="how">
-            <div class="track" style="display:flex;gap:18px;margin-top:18px">
-              <div class="step reveal"><div class="num">1</div><h5 style="margin:8px 0;color:var(--white)">Abrir cuenta</h5><p style="color:rgba(255,255,255,0.85)">Registro rápido con verificación segura.</p></div>
-              <div class="step reveal"><div class="num">2</div><h5 style="margin:8px 0;color:var(--white)">Seleccionar</h5><p style="color:rgba(255,255,255,0.85)">Oportunidades curadas por nuestro equipo de inversión.</p></div>
-              <div class="step reveal"><div class="num">3</div><h5 style="margin:8px 0;color:var(--white)">Invertir</h5><p style="color:rgba(255,255,255,0.85)">Transparencia, seguimiento y opciones de liquidez.</p></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- New section: Filosofía & Estrategia -->
-      <section id="philosophy" data-bg="#f8fafc" data-contrast="light">
-        <div class="container">
-          <h3 class="reveal">Nuestra filosofía y estrategia</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:18px;align-items:start">
-            <div class="reveal">
-              <h4>Misión</h4>
-              <p style="color:var(--bluesteel)">Invertir en compañías con potencial real de crecimiento y promover una relación directa entre capitalistas y empresas, reduciendo intermediarios y alineando incentivos.</p>
-            </div>
-            <div class="reveal">
-              <h4>Estrategia</h4>
-              <p style="color:var(--bluesteel)">Seleccionamos oportunidades mediante análisis fundamental riguroso, acompañamiento operativo y estructuras que permiten liquidez controlada. Priorizamos compañías con ventajas competitivas claras y equipos fundadores comprometidos.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="strategy" data-bg="#f8fafc" data-contrast="light">
-        <div class="container">
-          <div style="display:flex;gap:16px;align-items:stretch">
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">S/ 500,000+</div><div class="label">Activos administrados (AUM)</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">+10</div><div class="label">Clientes</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">20%</div><div class="label">Rendimiento (hasta 15 de septiembre de 2025)</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="team" data-bg="#ffffff" data-contrast="light">
-        <div class="container">
-          <h3 class="reveal" style="text-align:center;margin-bottom:18px">Equipo</h3>
-          <div class="team">
-            <div class="grid">
-              <div class="member reveal"><div class="avatar"></div><div><strong>Renzo Franco</strong><div style="color:var(--bluesteel);font-size:13px">CEO & Fundador</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>María Pérez</strong><div style="color:var(--bluesteel);font-size:13px">Head Inversiones</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Carlos Ruiz</strong><div style="color:var(--bluesteel);font-size:13px">Ops & Compliance</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Luisa Gómez</strong><div style="color:var(--bluesteel);font-size:13px">Marketing</div></div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="letters" data-bg="#ffffff" data-contrast="light">
-        <div class="container">
-          <h3 class="reveal">Cartas trimestrales</h3>
-          <div id="admin-upload" style="margin:16px 0;">
-            <input id="fileInput" type="file" accept="application/pdf" />
-            <input id="titleInput" placeholder="Título (ej: Carta Q1 2025)" style="margin-left:8px"/>
-            <input id="quarterInput" placeholder="Trimestre (ej: Q1 2025)" style="margin-left:8px"/>
-            <button id="uploadBtn" class="btn">Subir</button>
-            <small id="uploadMsg" style="display:block;color:var(--bluesteel);margin-top:8px"></small>
-          </div>
-
-          <div id="lettersList"></div>
-        </div>
-      </section>
-
-      <section id="cta" data-bg="#0A1F44" data-contrast="dark">
-        <div class="container cta-band" style="border-radius:12px">
-          <h3 style="margin:0;color:var(--white)">Tu inversión, siempre disponible. Hazla crecer con Wehold.</h3>
-          <div>
-            <button class="btn" id="band-contact">Solicitar contacto</button>
-            <button class="btn primary" id="band-start">Empieza hoy</button>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <footer style="padding:28px 24px;border-top:1px solid rgba(10,31,68,0.04)">
-      <div style="max-width:var(--container);margin:0 auto;display:flex;justify-content:space-between;align-items:center">
-        <small style="color:var(--bluesteel)">&copy; <span id="year"></span> Wehold • Invertir implica riesgo.</small>
-        <div style="display:flex;gap:14px;align-items:center"><a href="#legal">Términos</a><a href="mailto:contacto@wehold.com">contacto@wehold.com</a></div>
+      <div>
+        <h3>+10</h3>
+        <p>Clientes que confían en nosotros</p>
       </div>
-    </footer>
-
-  </div>
-
-  <!-- Minimal contact modal -->
-  <div id="modal" aria-hidden style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;visibility:hidden">
-    <div id="backdrop" style="position:absolute;inset:0;background:rgba(10,12,20,0.45)"></div>
-    <div style="position:relative;z-index:90;background:var(--white);border-radius:14px;padding:22px;max-width:640px;width:100%">
-      <button id="close" style="position:absolute;right:12px;top:12px;border:0;background:transparent;font-size:18px;cursor:pointer">✕</button>
-      <h4>Solicitar contacto</h4>
-      <form id="form" style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-        <input name="name" placeholder="Nombre" required style="padding:12px;border-radius:10px;border:1px solid #e6edf3">
-        <input name="email" placeholder="Email" type="email" required style="padding:12px;border-radius:10px;border:1px solid #e6edf3">
-        <input name="phone" placeholder="Teléfono (opcional)" style="padding:12px;border-radius:10px;border:1px solid #e6edf3">
-        <textarea name="msg" rows="3" placeholder="Mensaje (opcional)" style="padding:12px;border-radius:10px;border:1px solid #e6edf3"></textarea>
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button type="button" class="btn" id="cancel">Cancelar</button>
-          <button type="submit" class="btn primary">Enviar</button>
-        </div>
-      </form>
+      <div>
+        <h3>20%</h3>
+        <p>Rendimiento acumulado hasta el 15 de septiembre</p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  <section id="team">
+    <h2>Nuestro equipo</h2>
+    <p>Un grupo de profesionales dedicados a encontrar las mejores oportunidades de inversión, con experiencia en análisis financiero y gestión de portafolios.</p>
+  </section>
 
-    // GSAP + Lenis setup (robust fallback)
-    const header = document.getElementById('site-header');
-    function updateHeaderState(y){ if(y>20) header.classList.add('scrolled'); else header.classList.remove('scrolled'); }
+  <section id="letters">
+    <h2>Cartas trimestrales</h2>
+    <p>Aquí podrás encontrar nuestras actualizaciones y reflexiones sobre el mercado.</p>
+  </section>
 
-    if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-
-    let lenis, usingLenis = false;
-    function initScrolling(){
-      if(typeof Lenis !== 'undefined'){
-        try{
-          lenis = new Lenis({ duration:1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth:true, direction:'vertical' });
-          function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-          requestAnimationFrame(raf);
-
-          if(typeof ScrollTrigger !== 'undefined'){
-            ScrollTrigger.scrollerProxy(window, {
-              scrollTop(value){ if(arguments.length){ lenis.scrollTo(value); return; } return window.scrollY; },
-              getBoundingClientRect(){ return {top:0,left:0,width:window.innerWidth,height:window.innerHeight}; },
-              pinType: document.body.style.transform ? 'transform' : 'fixed'
-            });
-            lenis.on('scroll', ScrollTrigger.update);
-            lenis.on('scroll', (e)=> updateHeaderState((e && e.scroll) || window.scrollY));
-            usingLenis = true;
-          }
-        }catch(e){ console.warn('Lenis init failed', e); usingLenis = false; }
-      }
-      if(!usingLenis){ window.addEventListener('scroll', ()=> updateHeaderState(window.scrollY)); }
-      setTimeout(()=>{ if(typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); }, 120);
-    }
-    initScrolling();
-
-    // reveals
-    try{
-      document.querySelectorAll('.reveal').forEach(el=>{
-        gsap.fromTo(el, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, duration:0.7, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 80%'}});
-      });
-    }catch(e){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show')); }
-
-    // section bg transitions
-    try{
-      document.querySelectorAll('section[data-bg]').forEach(sec=>{
-        const bg = sec.dataset.bg; const contrast = sec.dataset.contrast;
-        ScrollTrigger.create({ trigger:sec, start:'top center', end:'bottom center', onEnter:()=> gsap.to(document.body,{backgroundColor:bg, color: contrast==='dark'? '--white' : '--midnight', duration:0.5}), onEnterBack:()=> gsap.to(document.body,{backgroundColor:bg, color: contrast==='dark'? '--white' : '--midnight', duration:0.5}) });
-      });
-    }catch(e){/* skip */}
-
-    // spark animation (hero)
-    try{
-      const spark = document.getElementById('spark');
-      if(spark && typeof gsap !== 'undefined') gsap.fromTo(spark, {strokeDasharray:1000, strokeDashoffset:1000}, {strokeDashoffset:0, duration:1.8, ease:'power2.out', repeat:-1, yoyo:true, opacity:0.95});
-    }catch(e){}
-
-    // letters mock list & upload flow (MVP)
-    async function fetchList(){
-      // mock data while backend isn't ready
-      const mock = [
-        { key: 'quarterly/carta-q2-2025.pdf', title: 'Carta Q2 2025', quarter: 'Q2 2025' },
-        { key: 'quarterly/carta-q1-2025.pdf', title: 'Carta Q1 2025', quarter: 'Q1 2025' }
-      ];
-      const container = document.getElementById('lettersList');
-      container.innerHTML = mock.map(item=>`<div class="item"><strong>${item.title}</strong> — <small>${item.quarter}</small><div style="margin-top:6px"><a href="#">Descargar PDF</a></div></div>`).join('');
-    }
-    fetchList();
-
-    document.getElementById('uploadBtn').addEventListener('click', async ()=>{
-      const file = document.getElementById('fileInput').files[0];
-      const title = document.getElementById('titleInput').value.trim();
-      const quarter = document.getElementById('quarterInput').value.trim();
-      const msg = document.getElementById('uploadMsg'); msg.textContent='';
-      if(!file){ msg.textContent='Selecciona un PDF.'; return; }
-      if(file.size > 10 * 1024 * 1024){ msg.textContent='Archivo demasiado grande (>10MB).'; return; }
-      if(!title || !quarter){ msg.textContent='Completa título y trimestre.'; return; }
-      // If backend exists we'll call /api/presign and /api/register — for now simulate success
-      msg.textContent = 'Simulación: archivo subido correctamente.';
-      setTimeout(()=>{ msg.textContent = ''; fetchList(); }, 800);
-    });
-
-    // modal & form
-    (function modalSetup(){
-      const modal = document.getElementById('modal');
-      const openBtns = document.querySelectorAll('#btn-demo,#btn-start,#hero-primary,#band-contact,#band-start');
-      const closeBtn = document.getElementById('close');
-      const cancel = document.getElementById('cancel');
-      openBtns.forEach(b=>b.addEventListener('click', ()=>{ modal.style.visibility='visible'; modal.setAttribute('aria-hidden','false'); }));
-      function closeModal(){ modal.style.visibility='hidden'; modal.setAttribute('aria-hidden','true'); }
-      closeBtn && closeBtn.addEventListener('click', closeModal); cancel && cancel.addEventListener('click', closeModal); document.getElementById('backdrop') && document.getElementById('backdrop').addEventListener('click', closeModal);
-      const form = document.getElementById('form'); form && form.addEventListener('submit',(e)=>{ e.preventDefault(); alert('Gracias — recibimos tu solicitud.'); closeModal(); });
-    })();
-
-  </script>
+  <footer>
+    <p>&copy; 2025 Wehold. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
-
