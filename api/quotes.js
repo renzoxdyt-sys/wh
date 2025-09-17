@@ -1,41 +1,65 @@
 // api/quotes.js
-import fetch from 'node-fetch';
-
+// Vercel Serverless (Node 18+). No API key required (uses Yahoo Finance public endpoint)
 const SYMBOLS = [
-  // índices globales (Finnhub acepta algunos caret symbols)
-  "^GSPC","^DJI","^IXIC","^FTSE","^GDAXI","^N225","^FCHI","^HSI",
-  // criptos (símbolos estilo broker / exchange que Finnhub soporta)
-  "BINANCE:BTCUSDT","BINANCE:ETHUSDT","BINANCE:ADAUSDT","BINANCE:XRPUSDT",
-  // algunos ETFs / productos
-  "IAU","ARGT"
+  { symbol: '^GSPC', label: 'S&P 500' },
+  { symbol: '^DJI', label: 'Dow Jones' },
+  { symbol: '^IXIC', label: 'Nasdaq' },
+  { symbol: '^FTSE', label: 'FTSE 100' },
+  { symbol: '^GDAXI', label: 'DAX' },
+  { symbol: '^N225', label: 'Nikkei 225' },
+  { symbol: '^FCHI', label: 'CAC 40' },
+  { symbol: '^HSI', label: 'Hang Seng' },
+
+  // Commodities (futures tickers on Yahoo)
+  { symbol: 'GC=F', label: 'Gold (futures)' },
+  { symbol: 'SI=F', label: 'Silver (futures)' },
+  { symbol: 'HG=F', label: 'Copper (futures)' },
+  { symbol: 'CL=F', label: 'Crude Oil (futures)' }
 ];
 
 export default async function handler(req, res) {
-  const key = process.env.FINNHUB_KEY;
-  if (!key) {
-    return res.status(500).json({ error: 'FINNHUB_KEY not configured' });
-  }
-
   try {
-    const promises = SYMBOLS.map(async (sym) => {
-      const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(sym)}&token=${encodeURIComponent(key)}`;
-      const r = await fetch(url);
-      if (!r.ok) {
-        return { symbol: sym, label: sym, price: null, changePct: null, error: true };
-      }
-      const j = await r.json();
-      const price = (j && typeof j.c === 'number' && j.c > 0) ? j.c : null;
-      const changePct = (j && typeof j.dp === 'number') ? Number(j.dp.toFixed(2)) : null;
-      return { symbol: sym, label: sym, price, changePct, error: false };
+    // Build comma-separated list for Yahoo
+    const symbols = SYMBOLS.map(s => s.symbol).join(',');
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
+
+    const r = await globalThis.fetch(url, { method: 'GET' });
+    if (!r.ok) {
+      const txt = await r.text().catch(()=>null);
+      console.error('yahoo fetch error', r.status, txt);
+      return res.status(502).json({ error: 'failed to fetch from Yahoo', status: r.status });
+    }
+    const j = await r.json();
+    const resultsRaw = (j && j.quoteResponse && Array.isArray(j.quoteResponse.result)) ? j.quoteResponse.result : [];
+
+    // Normalize: map each requested symbol to an object { symbol, label, price, changePct }
+    const mapBySymbol = {};
+    resultsRaw.forEach(item => {
+      // Yahoo fields: regularMarketPrice, regularMarketChangePercent
+      const sym = (item.symbol || '').toString().toUpperCase();
+      const price = (typeof item.regularMarketPrice === 'number') ? item.regularMarketPrice : null;
+      // regularMarketChangePercent may exist
+      const changePct = (typeof item.regularMarketChangePercent === 'number') ? Number(item.regularMarketChangePercent.toFixed(2)) : null;
+      mapBySymbol[sym] = { symbol: sym, price, changePct, raw: item };
     });
 
-    const results = await Promise.all(promises);
-    // Edge cache short to reduce calls
-    res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
+    // Build ordered results from SYMBOLS list
+    const results = SYMBOLS.map(s => {
+      const key = (s.symbol || '').toString().toUpperCase();
+      const found = mapBySymbol[key];
+      if (found) {
+        return { symbol: s.symbol, label: s.label, price: found.price, changePct: found.changePct };
+      } else {
+        // Missing data -> return nulls
+        return { symbol: s.symbol, label: s.label, price: null, changePct: null };
+      }
+    });
+
+    // Short edge cache (30s) — reduces repeated calls
+    res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
     return res.status(200).json({ ts: Date.now(), results });
   } catch (err) {
-    console.error('quotes error', err);
-    return res.status(500).json({ error: 'failed to fetch quotes', details: err.message });
+    console.error('quotes handler error', err);
+    return res.status(500).json({ error: 'internal', details: err.message });
   }
 }
-
