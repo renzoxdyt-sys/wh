@@ -47,7 +47,7 @@
     .site{min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
     /* Header */
-    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:120;padding:0 20px;background:transparent}
+    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:140;padding:0 20px;background:transparent}
     .nav{max-width:var(--container);margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
     .logo{display:flex;align-items:center;gap:12px}
     .logo-text{font-weight:700;font-family:'Montserrat',sans-serif;color:var(--burgundy);font-size:22px;letter-spacing:0.2px}
@@ -58,7 +58,7 @@
     .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(10,31,68,0.06);background:transparent;cursor:pointer;font-weight:700}
     .btn.primary{background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white);border:none;box-shadow:0 12px 30px rgba(122,21,35,0.08)}
 
-    /* Main */
+    /* MAIN */
     main{flex:1;height:100vh;overflow-y:auto;scroll-behavior:smooth}
     section{min-height:100vh;display:flex;align-items:center;padding:100px 24px}
     .container{max-width:var(--container);margin:0 auto;width:100%}
@@ -125,6 +125,54 @@
     }
     @media (prefers-reduced-motion: reduce){.reveal{transition:none;opacity:1;transform:none}body{transition:none}}
   </style>
+
+  <!-- Ticker CSS (ticker bar borgoña) -->
+  <style>
+    .ticker-wrap{
+      position:sticky;
+      top:72px; /* below header */
+      z-index:135;
+      background: var(--burgundy); /* Wehold burgundy */
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow:hidden;
+      height:44px;
+      display:flex;
+      align-items:center;
+      padding-left:8px;
+    }
+    .ticker {
+      display:flex;
+      align-items:center;
+      white-space:nowrap;
+      will-change:transform;
+      transform: translateX(0);
+    }
+    .ticker-item {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:0 16px;
+      font-weight:500;
+      color: #ffffff; /* white text */
+      font-size:14px;
+      border-left:1px solid rgba(255,255,255,0.06);
+    }
+    .ticker-item .symbol { font-weight:700; color: #ffffff; margin-right:8px; font-size:13px; }
+    .ticker-item .price { min-width:80px; text-align:right; font-weight:700; }
+    .ticker-item .chg { margin-left:10px; min-width:64px; text-align:right; display:flex; align-items:center; gap:6px; justify-content:flex-end; }
+    .chg .arrow{font-size:12px;}
+    .chg.up { color:#1fb97a; } /* green */
+    .chg.flat { color:#cbd5e1; } /* gray-ish */
+    .chg.down { color:#ff6b6b; } /* red */
+
+    @media (max-width:640px){
+      .ticker-wrap{height:36px}
+      .ticker-item{padding:0 10px;font-size:13px}
+      .ticker-item .price{min-width:64px}
+    }
+  </style>
+
 </head>
 <body>
   <div class="site">
@@ -152,6 +200,11 @@
         </div>
       </div>
     </header>
+
+    <!-- TICKER BAR -->
+    <div class="ticker-wrap" aria-hidden="false">
+      <div id="ticker" class="ticker" role="list" aria-label="Market ticker"></div>
+    </div>
 
     <main id="main-scroll">
       <section id="home" data-bg="#ffffff" data-contrast="light">
@@ -327,6 +380,7 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -360,6 +414,7 @@
     }
     initScrolling();
 
+    // reveal animations
     try{
       document.querySelectorAll('.reveal').forEach(el=>{
         gsap.fromTo(el, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, duration:0.7, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 80%'}});
@@ -368,6 +423,7 @@
       document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show'));
     }
 
+    // section bg transitions (robust)
     try{
       document.querySelectorAll('section[data-bg]').forEach(sec=>{
         const bg = sec.dataset.bg || '#ffffff';
@@ -395,6 +451,7 @@
       });
     }catch(e){ console.warn('section color transitions error', e); }
 
+    // hero spark animation
     try{
       const spark = document.getElementById('spark');
       if(spark && typeof gsap !== 'undefined'){
@@ -402,6 +459,7 @@
       }
     }catch(e){}
 
+    // Letters: mock listing & simulated upload (backend later)
     async function fetchList(){
       const mock = [
         { key: 'quarterly/carta-q2-2025.pdf', title: 'Carta Q2 2025', quarter: 'Q2 2025' },
@@ -420,10 +478,12 @@
       if(!file){ msg.textContent='Selecciona un PDF.'; return; }
       if(file.size > 10 * 1024 * 1024){ msg.textContent='Archivo demasiado grande (>10MB).'; return; }
       if(!title || !quarter){ msg.textContent='Completa título y trimestre.'; return; }
+      // simulate upload until we integrate backend
       msg.textContent = 'Simulación: archivo subido correctamente.';
       setTimeout(()=>{ msg.textContent=''; fetchList(); }, 800);
     });
 
+    // modal & form
     (function modalSetup(){
       const modal = document.getElementById('modal');
       const openBtns = document.querySelectorAll('#btn-demo,#btn-start,#hero-primary,#band-contact,#band-start');
@@ -437,6 +497,103 @@
       const form = document.getElementById('form'); form && form.addEventListener('submit',(e)=>{ e.preventDefault(); alert('Gracias — recibimos tu solicitud.'); closeModal(); });
     })();
   </script>
+
+  <!-- TICKER CLIENT: calls /api/quotes every 5s -->
+  <script>
+  (function(){
+    const TICKER = document.getElementById('ticker');
+    const POLL_INTERVAL = 5000; // 5s
+    let animationFrame = null;
+    let lastWidth = 0;
+    let startTime = null;
+    let speed = 40; // px/sec
+
+    function createItem({label, price, changePct}) {
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      const priceText = (price === null || price === undefined) ? '—' : Number(price).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      const change = (changePct === null || changePct === undefined) ? null : Number(changePct);
+      let chClass = 'flat';
+      let arrow = '→';
+      if (change !== null) {
+        if (change > 0.01) { chClass = 'up'; arrow = '▲'; }
+        else if (change < -0.01) { chClass = 'down'; arrow = '▼'; }
+        else { chClass = 'flat'; arrow = '→'; }
+      }
+      item.innerHTML = `<span class="symbol">${label}</span><span class="price"> ${priceText}</span><span class="chg ${chClass}"><span class="arrow">${arrow}</span><span class="pct">${change !== null ? (change > 0 ? '+' : '') + change + '%' : ''}</span></span>`;
+      return item;
+    }
+
+    function render(items) {
+      cancelAnim();
+      TICKER.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      items.forEach(it => frag.appendChild(createItem(it)));
+      const fragClone = frag.cloneNode(true);
+      TICKER.appendChild(frag);
+      TICKER.appendChild(fragClone);
+      requestAnimationFrame((ts) => {
+        startTime = ts;
+        lastWidth = TICKER.scrollWidth / 2;
+        cancelAnim();
+        animate(ts);
+      });
+    }
+
+    function animate(ts) {
+      if (!startTime) startTime = ts;
+      const half = lastWidth || (TICKER.scrollWidth / 2);
+      const elapsed = (ts - startTime) / 1000;
+      const x = (elapsed * speed) % half;
+      TICKER.style.transform = `translateX(-${x}px)`;
+      animationFrame = requestAnimationFrame(animate);
+    }
+    function cancelAnim(){ if(animationFrame) cancelAnimationFrame(animationFrame); animationFrame = null; }
+
+    async function fetchQuotes() {
+      try {
+        const r = await fetch('/api/quotes');
+        if (!r.ok) throw new Error('quotes fetch failed');
+        const j = await r.json();
+        if (!j || !j.results) throw new Error('invalid response');
+        const mapped = j.results.map(x => ({
+          label: x.label,
+          price: (x.price !== null && x.price !== undefined) ? x.price : null,
+          changePct: (x.changePct !== null && x.changePct !== undefined) ? x.changePct : null
+        }));
+        render(mapped);
+      } catch (err) {
+        console.warn('Ticker fetch error, using fallback mock', err);
+        const mock = [
+          { label: 'S&P 500', price: (4500 + Math.random()*200).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
+          { label: 'Dow Jones', price: (35000 + Math.random()*400).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
+          { label: 'Nasdaq', price: (14000 + Math.random()*300).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
+          { label: 'FTSE 100', price: (7500 + Math.random()*200).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
+          { label: 'Nikkei 225', price: (33000 + Math.random()*400).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
+          { label: 'BTC', price: (40000 + Math.random()*2000).toFixed(2), changePct: (Math.random()*4-2).toFixed(2) },
+          { label: 'ETH', price: (2500 + Math.random()*200).toFixed(2), changePct: (Math.random()*4-2).toFixed(2) },
+          { label: 'ADA', price: (0.40 + Math.random()*0.2).toFixed(4), changePct: (Math.random()*4-2).toFixed(2) },
+          { label: 'XRP', price: (0.60 + Math.random()*0.2).toFixed(4), changePct: (Math.random()*4-2).toFixed(2) }
+        ];
+        render(mock);
+      }
+    }
+
+    fetchQuotes();
+    const poller = setInterval(fetchQuotes, POLL_INTERVAL);
+
+    window.addEventListener('beforeunload', ()=> {
+      clearInterval(poller); cancelAnim();
+    });
+
+    let resizeTO = null;
+    window.addEventListener('resize', ()=> {
+      if (resizeTO) clearTimeout(resizeTO);
+      resizeTO = setTimeout(()=> { fetchQuotes(); }, 300);
+    });
+
+  })();
+  </script>
+
 </body>
 </html>
-
