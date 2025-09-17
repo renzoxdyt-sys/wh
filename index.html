@@ -80,9 +80,10 @@
     .step{flex:1;padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);box-shadow:0 10px 30px rgba(10,31,68,0.04);text-align:center}
     .step .num{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));display:inline-flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;margin-bottom:12px}
 
-    /* Metrics */
+    /* Metrics (updated values) */
     .metrics .row{display:flex;gap:16px}
     .metric{flex:1;padding:18px;border-radius:12px;color:var(--white);background:linear-gradient(180deg,var(--midnight),rgba(10,31,68,0.85));text-align:center}
+    .metric .label{font-size:13px;color:var(--bluesteel);margin-top:6px}
 
     /* Team */
     .team .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -115,6 +116,7 @@
             <li><a href="#how">Cómo funciona</a></li>
             <li><a href="#strategy">Estrategia</a></li>
             <li><a href="#team">Equipo</a></li>
+            <li><a href="#letters">Cartas</a></li>
           </ul>
         </nav>
         <div class="actions">
@@ -175,12 +177,43 @@
         </div>
       </section>
 
+      <!-- New section: Filosofía & Estrategia -->
+      <section id="philosophy" data-bg="#f8fafc" data-contrast="light">
+        <div class="container">
+          <h3 class="reveal">Nuestra filosofía y estrategia</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:18px;align-items:start">
+            <div class="reveal">
+              <h4>Misión</h4>
+              <p style="color:var(--bluesteel)">Invertir en compañías con potencial real de crecimiento y promover una relación directa entre capitalistas y empresas, reduciendo intermediarios y alineando incentivos.</p>
+            </div>
+            <div class="reveal">
+              <h4>Estrategia</h4>
+              <p style="color:var(--bluesteel)">Seleccionamos oportunidades mediante análisis fundamental riguroso, acompañamiento operativo y estructuras que permiten liquidez controlada. Priorizamos compañías con ventajas competitivas claras y equipos fundadores comprometidos.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="strategy" data-bg="#f8fafc" data-contrast="light">
         <div class="container">
           <div style="display:flex;gap:16px;align-items:stretch">
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">$120M</div><div>Activos administrados</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">+24%</div><div>Performance vs S&P (último año)</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">2019</div><div>Año fundación</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">S/ 500,000+</div><div class="label">Activos administrados (AUM)</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">+10</div><div class="label">Clientes</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">20%</div><div class="label">Rendimiento (hasta 15 de septiembre de 2025)</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="team" data-bg="#ffffff" data-contrast="light">
+        <div class="container">
+          <h3 class="reveal" style="text-align:center;margin-bottom:18px">Equipo</h3>
+          <div class="team">
+            <div class="grid">
+              <div class="member reveal"><div class="avatar"></div><div><strong>Renzo Franco</strong><div style="color:var(--bluesteel);font-size:13px">CEO & Fundador</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>María Pérez</strong><div style="color:var(--bluesteel);font-size:13px">Head Inversiones</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>Carlos Ruiz</strong><div style="color:var(--bluesteel);font-size:13px">Ops & Compliance</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>Luisa Gómez</strong><div style="color:var(--bluesteel);font-size:13px">Marketing</div></div></div>
+            </div>
           </div>
         </div>
       </section>
@@ -197,20 +230,6 @@
           </div>
 
           <div id="lettersList"></div>
-        </div>
-      </section>
-
-      <section id="team" data-bg="#ffffff" data-contrast="light">
-        <div class="container">
-          <h3 class="reveal" style="text-align:center;margin-bottom:18px">Equipo</h3>
-          <div class="team">
-            <div class="grid">
-              <div class="member reveal"><div class="avatar"></div><div><strong>Renzo Franco</strong><div style="color:var(--bluesteel);font-size:13px">CEO & Fundador</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>María Pérez</strong><div style="color:var(--bluesteel);font-size:13px">Head Inversiones</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Carlos Ruiz</strong><div style="color:var(--bluesteel);font-size:13px">Ops & Compliance</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Luisa Gómez</strong><div style="color:var(--bluesteel);font-size:13px">Marketing</div></div></div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -349,3 +368,4 @@
   </script>
 </body>
 </html>
+
