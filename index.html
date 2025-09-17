@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Wehold — Inversión directa en compañías</title>
-  <meta name="description" content="Wehold — Accede a participaciones reales en empresas con transparencia, liquidez y comisiones alineadas a resultados.">
+  <meta name="description" content="Wehold — Accede a participaciones reales en empresas con transparencia, liquidez y comisiones alineadas a resultados." />
 
   <!-- Montserrat (Light 300, Medium 500, Bold 700) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
@@ -17,18 +17,14 @@
   <style>
     /* Brand palette */
     :root{
-      --burgundy: #7A1523; /* Pantone 1955 C */
-      --midnight: #0A1F44; /* Pantone 2767 C */
-      --bluesteel: #B0B7C3; /* Pantone 429 C */
+      --burgundy: #7A1523; /* borgoña */
+      --midnight: #0A1F44; /* midnight blue */
+      --bluesteel: #B0B7C3;
       --white: #FFFFFF;
       --black: #000000;
-
-      --bg: var(--white);
-      --text: var(--midnight);
-      --muted: #6b7280;
+      --wehold-gold: #D4AF37;
 
       --container:1180px;
-      --radius:14px;
       --ease:cubic-bezier(.2,.9,.2,1);
     }
 
@@ -37,29 +33,30 @@
     body{
       margin:0;
       font-family:'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
+      background:var(--white);
+      color:var(--midnight);
       -webkit-font-smoothing:antialiased;
       transition:background .45s var(--ease), color .45s var(--ease);
+      -webkit-font-smoothing:antialiased;
     }
     a{text-decoration:none;color:inherit}
 
     .site{min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
     /* Header */
-    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:140;padding:0 20px;background:transparent}
+    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:160;padding:0 20px;background:transparent}
     .nav{max-width:var(--container);margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
     .logo{display:flex;align-items:center;gap:12px}
     .logo-text{font-weight:700;font-family:'Montserrat',sans-serif;color:var(--burgundy);font-size:22px;letter-spacing:0.2px}
     nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{font-weight:500;font-size:15px;color:var(--text);opacity:.95;padding:8px 12px;border-radius:8px}
-    nav a.active{background:rgba(10,31,68,0.06)}
+    nav a{font-weight:500;font-size:15px;color:var(--midnight);opacity:.95;padding:8px 12px;border-radius:8px}
+    nav a:hover{color:var(--burgundy)}
     .actions{display:flex;gap:12px;align-items:center}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(10,31,68,0.06);background:transparent;cursor:pointer;font-weight:700}
     .btn.primary{background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white);border:none;box-shadow:0 12px 30px rgba(122,21,35,0.08)}
 
     /* MAIN */
-    main{flex:1;height:100vh;overflow-y:auto;scroll-behavior:smooth}
+    main{flex:1;margin-top:116px; /* space for header + ticker */ min-height:calc(100vh - 116px);overflow-y:auto;scroll-behavior:smooth}
     section{min-height:100vh;display:flex;align-items:center;padding:100px 24px}
     .container{max-width:var(--container);margin:0 auto;width:100%}
 
@@ -77,12 +74,8 @@
     .feature h4{margin:0 0 8px;color:var(--midnight);font-weight:700}
     .feature p{margin:0;color:var(--bluesteel);font-weight:300}
 
-    /* How (explicit dark text on light bg) */
+    /* How */
     section#how { color: var(--midnight); }
-    section#how h3{color:var(--midnight)}
-    section#how .step h5{color:var(--midnight)}
-    section#how .step p{color:rgba(10,31,68,0.85)}
-
     .how .track{display:flex;gap:18px}
     .step{flex:1;padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);box-shadow:0 10px 30px rgba(10,31,68,0.04);text-align:center}
     .step .num{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));display:inline-flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;margin-bottom:12px}
@@ -92,7 +85,6 @@
     #philosophy p{color:var(--bluesteel);font-weight:300}
 
     /* Metrics */
-    .metrics .row{display:flex;gap:16px}
     .metric{flex:1;padding:18px;border-radius:12px;color:var(--white);background:linear-gradient(180deg,var(--midnight),rgba(10,31,68,0.85));text-align:center}
     .metric .big{font-size:28px;font-weight:700}
     .metric .label{font-size:13px;color:var(--bluesteel);margin-top:6px;font-weight:300}
@@ -101,10 +93,6 @@
     .team .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
     .member{padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);display:flex;gap:12px;align-items:center}
     .avatar{width:64px;height:64px;border-radius:10px;background:linear-gradient(180deg,var(--bluesteel),#eef3fb);}
-
-    /* Letters */
-    #lettersList .item{padding:12px;border-radius:10px;border:1px solid rgba(10,31,68,0.04);margin-bottom:10px;background:linear-gradient(180deg,#fff,#fbfcff)}
-    #lettersList .item a{color:var(--midnight);font-weight:700}
 
     .cta-band{margin:48px auto;padding:32px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white)}
 
@@ -126,27 +114,27 @@
     @media (prefers-reduced-motion: reduce){.reveal{transition:none;opacity:1;transform:none}body{transition:none}}
   </style>
 
-  <!-- Ticker CSS (ticker bar borgoña) -->
+  <!-- TICKER styles (borgoña + wehold gold) -->
   <style>
+    :root{ --wehold-gold: #D4AF37; }
     .ticker-wrap{
       position:sticky;
-      top:72px; /* below header */
-      z-index:135;
-      background: var(--burgundy); /* Wehold burgundy */
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      top:72px;
+      z-index:150;
+      background: var(--burgundy);
       overflow:hidden;
       height:44px;
       display:flex;
       align-items:center;
       padding-left:8px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      border-bottom:1px solid rgba(255,255,255,0.06);
     }
     .ticker {
       display:flex;
       align-items:center;
       white-space:nowrap;
       will-change:transform;
-      transform: translateX(0);
     }
     .ticker-item {
       display:inline-flex;
@@ -154,7 +142,7 @@
       gap:10px;
       padding:0 16px;
       font-weight:500;
-      color: #ffffff; /* white text */
+      color: #ffffff;
       font-size:14px;
       border-left:1px solid rgba(255,255,255,0.06);
     }
@@ -162,9 +150,15 @@
     .ticker-item .price { min-width:80px; text-align:right; font-weight:700; }
     .ticker-item .chg { margin-left:10px; min-width:64px; text-align:right; display:flex; align-items:center; gap:6px; justify-content:flex-end; }
     .chg .arrow{font-size:12px;}
-    .chg.up { color:#1fb97a; } /* green */
-    .chg.flat { color:#cbd5e1; } /* gray-ish */
-    .chg.down { color:#ff6b6b; } /* red */
+    .chg.up { color:#1fb97a; }
+    .chg.flat { color:#cbd5e1; }
+    .chg.down { color:#ff6b6b; }
+
+    .ticker-item.wehold { color: var(--wehold-gold); }
+    .ticker-item.wehold .symbol { color: var(--wehold-gold); font-weight:800; letter-spacing:0.6px; }
+    .ticker-item.wehold .price { color: var(--white); background: rgba(255,255,255,0.06); padding:6px 10px; border-radius:8px; font-weight:800; }
+
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(calc(var(--scrollWidth) * -1)); } }
 
     @media (max-width:640px){
       .ticker-wrap{height:36px}
@@ -172,14 +166,12 @@
       .ticker-item .price{min-width:64px}
     }
   </style>
-
 </head>
 <body>
   <div class="site">
     <header id="site-header">
       <div class="nav">
         <div class="logo">
-          <!-- Logo as styled text in borgoña (Montserrat Bold) -->
           <div class="logo-text" aria-label="Wehold">Wehold.</div>
         </div>
 
@@ -195,6 +187,17 @@
         </nav>
 
         <div class="actions">
+          <!-- Portfolio widget placed here -->
+          <div id="portfolioWidget" style="margin-right:8px;display:flex;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:12px;color:var(--bluesteel);font-weight:300">Cartera</div>
+              <div style="background:linear-gradient(180deg,#fff,#fbfcff);padding:8px 12px;border-radius:10px;border:1px solid rgba(10,31,68,0.04);display:flex;gap:10px;align-items:center">
+                <div style="font-weight:700;color:var(--midnight)" id="nav-value">Cargando...</div>
+                <div id="nav-pct" style="font-weight:700;color:var(--bluesteel)">—</div>
+              </div>
+            </div>
+          </div>
+
           <button class="btn" id="btn-demo">Solicitar demo</button>
           <button class="btn primary" id="btn-start">Empieza hoy</button>
         </div>
@@ -207,6 +210,7 @@
     </div>
 
     <main id="main-scroll">
+      <!-- HERO -->
       <section id="home" data-bg="#ffffff" data-contrast="light">
         <div class="container hero-grid">
           <div>
@@ -232,6 +236,7 @@
         </div>
       </section>
 
+      <!-- FEATURES -->
       <section id="features" data-bg="#f7fbff" data-contrast="light">
         <div class="container">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
@@ -246,6 +251,7 @@
         </div>
       </section>
 
+      <!-- HOW -->
       <section id="how" data-bg="#f8fafc" data-contrast="light">
         <div class="container">
           <h3 class="reveal">Cómo funciona</h3>
@@ -273,6 +279,7 @@
         </div>
       </section>
 
+      <!-- PHILOSOPHY / STRATEGY -->
       <section id="philosophy" data-bg="#f8fafc" data-contrast="light">
         <div class="container">
           <h3 class="reveal">Nuestra filosofía y estrategia</h3>
@@ -289,6 +296,7 @@
         </div>
       </section>
 
+      <!-- NUMBERS / METRICS -->
       <section id="strategy" data-bg="#f8fafc" data-contrast="light">
         <div class="container">
           <div style="display:flex;gap:16px;align-items:stretch">
@@ -310,6 +318,7 @@
         </div>
       </section>
 
+      <!-- TEAM -->
       <section id="team" data-bg="#ffffff" data-contrast="light">
         <div class="container">
           <h3 class="reveal" style="text-align:center;margin-bottom:18px">Equipo</h3>
@@ -324,6 +333,7 @@
         </div>
       </section>
 
+      <!-- LETTERS (at the end) -->
       <section id="letters" data-bg="#ffffff" data-contrast="light">
         <div class="container">
           <h3 class="reveal">Cartas trimestrales</h3>
@@ -352,16 +362,15 @@
 
     </main>
 
-    <footer style="padding:28px 24px;border-top:1px solid rgba(10,31,68,0.04)">
+    <footer>
       <div style="max-width:var(--container);margin:0 auto;display:flex;justify-content:space-between;align-items:center">
         <small style="color:var(--bluesteel)">&copy; <span id="year"></span> Wehold • Invertir implica riesgo.</small>
         <div style="display:flex;gap:14px;align-items:center"><a href="#legal">Términos</a><a href="mailto:contacto@wehold.com">contacto@wehold.com</a></div>
       </div>
     </footer>
-
   </div>
 
-  <!-- Minimal contact modal -->
+  <!-- Modal contacto -->
   <div id="modal" aria-hidden style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;visibility:hidden">
     <div id="backdrop" style="position:absolute;inset:0;background:rgba(10,12,20,0.45)"></div>
     <div style="position:relative;z-index:90;background:var(--white);border-radius:14px;padding:22px;max-width:640px;width:100%">
@@ -380,19 +389,19 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- SCRIPTS -->
   <script>
+    // small init
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // GSAP + ScrollTrigger
     if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
-    const header = document.getElementById('site-header');
-    function updateHeaderState(y){ if(y>20) header.classList.add('scrolled'); else header.classList.remove('scrolled'); }
-
+    // Safe Lenis init (avoid "Lenis is not defined" errors)
     let lenis, usingLenis = false;
     function initScrolling(){
-      if(typeof Lenis !== 'undefined'){
-        try{
+      try{
+        if(typeof Lenis !== 'undefined'){
           lenis = new Lenis({ duration:1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth:true, direction:'vertical' });
           function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
           requestAnimationFrame(raf);
@@ -404,17 +413,19 @@
               pinType: document.body.style.transform ? 'transform' : 'fixed'
             });
             lenis.on('scroll', ScrollTrigger.update);
-            lenis.on('scroll', (e)=> updateHeaderState((e && e.scroll) || window.scrollY));
             usingLenis = true;
           }
-        }catch(e){ console.warn('Lenis init failed', e); usingLenis = false; }
+        }
+      }catch(e){
+        console.warn('Lenis init skipped', e);
+        usingLenis = false;
       }
-      if(!usingLenis) window.addEventListener('scroll', ()=> updateHeaderState(window.scrollY));
+      if(!usingLenis) window.addEventListener('scroll', ()=> {});
       setTimeout(()=>{ if(typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); }, 120);
     }
     initScrolling();
 
-    // reveal animations
+    // reveal animations with fallback
     try{
       document.querySelectorAll('.reveal').forEach(el=>{
         gsap.fromTo(el, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, duration:0.7, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 80%'}});
@@ -423,43 +434,7 @@
       document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show'));
     }
 
-    // section bg transitions (robust)
-    try{
-      document.querySelectorAll('section[data-bg]').forEach(sec=>{
-        const bg = sec.dataset.bg || '#ffffff';
-        const contrast = sec.dataset.contrast || 'light';
-        if(typeof ScrollTrigger !== 'undefined'){
-          ScrollTrigger.create({
-            trigger: sec,
-            start: 'top center',
-            end: 'bottom center',
-            onEnter: ()=> {
-              document.body.style.backgroundColor = bg;
-              document.body.style.color = (contrast === 'dark') ? '#ffffff' : '#0A1F44';
-            },
-            onEnterBack: ()=> {
-              document.body.style.backgroundColor = bg;
-              document.body.style.color = (contrast === 'dark') ? '#ffffff' : '#0A1F44';
-            }
-          });
-        } else {
-          if(sec.id === 'home'){
-            document.body.style.backgroundColor = bg;
-            document.body.style.color = '#0A1F44';
-          }
-        }
-      });
-    }catch(e){ console.warn('section color transitions error', e); }
-
-    // hero spark animation
-    try{
-      const spark = document.getElementById('spark');
-      if(spark && typeof gsap !== 'undefined'){
-        gsap.fromTo(spark, {strokeDasharray:1000, strokeDashoffset:1000}, {strokeDashoffset:0, duration:1.8, ease:'power2.out', repeat:-1, yoyo:true, opacity:0.95});
-      }
-    }catch(e){}
-
-    // Letters: mock listing & simulated upload (backend later)
+    // Letters mock
     async function fetchList(){
       const mock = [
         { key: 'quarterly/carta-q2-2025.pdf', title: 'Carta Q2 2025', quarter: 'Q2 2025' },
@@ -470,6 +445,7 @@
     }
     fetchList();
 
+    // Upload mock
     document.getElementById('uploadBtn').addEventListener('click', async ()=>{
       const file = document.getElementById('fileInput').files[0];
       const title = document.getElementById('titleInput').value.trim();
@@ -478,12 +454,11 @@
       if(!file){ msg.textContent='Selecciona un PDF.'; return; }
       if(file.size > 10 * 1024 * 1024){ msg.textContent='Archivo demasiado grande (>10MB).'; return; }
       if(!title || !quarter){ msg.textContent='Completa título y trimestre.'; return; }
-      // simulate upload until we integrate backend
       msg.textContent = 'Simulación: archivo subido correctamente.';
       setTimeout(()=>{ msg.textContent=''; fetchList(); }, 800);
     });
 
-    // modal & form
+    // modal
     (function modalSetup(){
       const modal = document.getElementById('modal');
       const openBtns = document.querySelectorAll('#btn-demo,#btn-start,#hero-primary,#band-contact,#band-start');
@@ -498,19 +473,18 @@
     })();
   </script>
 
-  <!-- TICKER CLIENT: calls /api/quotes every 5s -->
+  <!-- TICKER client + portfolio widget (poll 15s) -->
   <script>
   (function(){
-    const TICKER = document.getElementById('ticker');
-    const POLL_INTERVAL = 5000; // 5s
-    let animationFrame = null;
-    let lastWidth = 0;
-    let startTime = null;
-    let speed = 40; // px/sec
+    // Ticker
+    const T = document.getElementById('ticker');
+    const POLL_INTERVAL = 15000; // 15s
+    const SPEED_PX_PER_SEC = 60;
+    let poller = null;
 
-    function createItem({label, price, changePct}) {
+    function createItem(label, price, changePct, isWehold=false) {
       const item = document.createElement('div');
-      item.className = 'ticker-item';
+      item.className = 'ticker-item' + (isWehold ? ' wehold' : '');
       const priceText = (price === null || price === undefined) ? '—' : Number(price).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
       const change = (changePct === null || changePct === undefined) ? null : Number(changePct);
       let chClass = 'flat';
@@ -520,80 +494,90 @@
         else if (change < -0.01) { chClass = 'down'; arrow = '▼'; }
         else { chClass = 'flat'; arrow = '→'; }
       }
-      item.innerHTML = `<span class="symbol">${label}</span><span class="price"> ${priceText}</span><span class="chg ${chClass}"><span class="arrow">${arrow}</span><span class="pct">${change !== null ? (change > 0 ? '+' : '') + change + '%' : ''}</span></span>`;
+      item.innerHTML = `<span class="symbol">${label}</span><span class="price">${priceText}</span><span class="chg ${chClass}"><span class="arrow">${arrow}</span><span class="pct">${change !== null ? (change > 0 ? '+' : '') + change + '%' : ''}</span></span>`;
       return item;
     }
 
-    function render(items) {
-      cancelAnim();
-      TICKER.innerHTML = '';
+    function buildAndAnimate(items) {
+      T.style.animation = 'none';
+      T.innerHTML = '';
       const frag = document.createDocumentFragment();
-      items.forEach(it => frag.appendChild(createItem(it)));
+      items.forEach(it => frag.appendChild(createItem(it.label, it.price, it.changePct, it.isWehold)));
       const fragClone = frag.cloneNode(true);
-      TICKER.appendChild(frag);
-      TICKER.appendChild(fragClone);
-      requestAnimationFrame((ts) => {
-        startTime = ts;
-        lastWidth = TICKER.scrollWidth / 2;
-        cancelAnim();
-        animate(ts);
+      T.appendChild(frag);
+      T.appendChild(fragClone);
+      requestAnimationFrame(()=> {
+        const totalWidth = T.scrollWidth;
+        const half = totalWidth / 2;
+        if (!half || half === Infinity) return;
+        T.style.setProperty('--scrollWidth', half + 'px');
+        const duration = Math.max(12, Math.round(half / SPEED_PX_PER_SEC));
+        void T.offsetWidth;
+        T.style.animation = `ticker-scroll ${duration}s linear infinite`;
       });
     }
 
-    function animate(ts) {
-      if (!startTime) startTime = ts;
-      const half = lastWidth || (TICKER.scrollWidth / 2);
-      const elapsed = (ts - startTime) / 1000;
-      const x = (elapsed * speed) % half;
-      TICKER.style.transform = `translateX(-${x}px)`;
-      animationFrame = requestAnimationFrame(animate);
-    }
-    function cancelAnim(){ if(animationFrame) cancelAnimationFrame(animationFrame); animationFrame = null; }
-
-    async function fetchQuotes() {
+    async function fetchAndRender() {
       try {
-        const r = await fetch('/api/quotes');
-        if (!r.ok) throw new Error('quotes fetch failed');
-        const j = await r.json();
-        if (!j || !j.results) throw new Error('invalid response');
-        const mapped = j.results.map(x => ({
-          label: x.label,
-          price: (x.price !== null && x.price !== undefined) ? x.price : null,
-          changePct: (x.changePct !== null && x.changePct !== undefined) ? x.changePct : null
-        }));
-        render(mapped);
+        const [qRes, pRes] = await Promise.all([
+          fetch('/api/quotes').then(r => r.ok ? r.json() : Promise.reject('quotes fail')).catch(()=>null),
+          fetch('/api/portfolio').then(r => r.ok ? r.json() : null).catch(()=>null)
+        ]);
+        const quotes = (qRes && qRes.results) ? qRes.results : [];
+        const items = [];
+
+        if (pRes && pRes.portfolioIndex) {
+          items.push({ label: 'Wehold', price: pRes.portfolioIndex, changePct: pRes.dailyChangePct, isWehold: true });
+          // update header widget
+          const navEl = document.getElementById('nav-value');
+          const pctEl = document.getElementById('nav-pct');
+          if(navEl) navEl.textContent = pRes.nav ? `S/ ${pRes.nav.toLocaleString()}` : '—';
+          if(pctEl) {
+            if(pRes.dailyChangePct !== null) {
+              const up = pRes.dailyChangePct > 0;
+              pctEl.textContent = `${up ? '▲' : pRes.dailyChangePct < 0 ? '▼' : '→'} ${pRes.dailyChangePct}%`;
+              pctEl.style.color = up ? '#1fb97a' : pRes.dailyChangePct < 0 ? '#ff6b6b' : '#cbd5e1';
+            } else {
+              pctEl.textContent = '—';
+              pctEl.style.color = 'var(--bluesteel)';
+            }
+          }
+        }
+
+        quotes.forEach(q => {
+          items.push({ label: q.label, price: q.price, changePct: q.changePct, isWehold: false });
+        });
+
+        // ensure we have items; fallback if empty
+        if (items.length === 0) {
+          items.push({ label: 'Wehold', price: 1000.00, changePct: 0.00, isWehold: true });
+          items.push({ label: 'S&P 500', price: 4500.12, changePct: 0.34 });
+        }
+
+        buildAndAnimate(items);
       } catch (err) {
-        console.warn('Ticker fetch error, using fallback mock', err);
+        console.warn('Ticker error', err);
         const mock = [
-          { label: 'S&P 500', price: (4500 + Math.random()*200).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
-          { label: 'Dow Jones', price: (35000 + Math.random()*400).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
-          { label: 'Nasdaq', price: (14000 + Math.random()*300).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
-          { label: 'FTSE 100', price: (7500 + Math.random()*200).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
-          { label: 'Nikkei 225', price: (33000 + Math.random()*400).toFixed(2), changePct: (Math.random()*2-1).toFixed(2) },
-          { label: 'BTC', price: (40000 + Math.random()*2000).toFixed(2), changePct: (Math.random()*4-2).toFixed(2) },
-          { label: 'ETH', price: (2500 + Math.random()*200).toFixed(2), changePct: (Math.random()*4-2).toFixed(2) },
-          { label: 'ADA', price: (0.40 + Math.random()*0.2).toFixed(4), changePct: (Math.random()*4-2).toFixed(2) },
-          { label: 'XRP', price: (0.60 + Math.random()*0.2).toFixed(4), changePct: (Math.random()*4-2).toFixed(2) }
+          { label: 'Wehold', price: 1000.00, changePct: 0.12, isWehold: true },
+          { label: 'S&P 500', price: 4500.12, changePct: 0.34 },
+          { label: 'Dow Jones', price: 35000.12, changePct: -0.12 },
+          { label: 'Nasdaq', price: 14000.12, changePct: 0.52 },
+          { label: 'BTC', price: 42000.12, changePct: -1.35 }
         ];
-        render(mock);
+        buildAndAnimate(mock);
       }
     }
 
-    fetchQuotes();
-    const poller = setInterval(fetchQuotes, POLL_INTERVAL);
+    fetchAndRender();
+    poller = setInterval(fetchAndRender, POLL_INTERVAL);
 
-    window.addEventListener('beforeunload', ()=> {
-      clearInterval(poller); cancelAnim();
-    });
-
-    let resizeTO = null;
+    window.addEventListener('beforeunload', ()=> clearInterval(poller));
     window.addEventListener('resize', ()=> {
-      if (resizeTO) clearTimeout(resizeTO);
-      resizeTO = setTimeout(()=> { fetchQuotes(); }, 300);
+      if (typeof window._tickerResizeTO !== 'undefined') clearTimeout(window._tickerResizeTO);
+      window._tickerResizeTO = setTimeout(()=> fetchAndRender(), 250);
     });
 
   })();
   </script>
-
 </body>
 </html>
