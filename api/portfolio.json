@@ -1,0 +1,58 @@
+// api/portfolio.js
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+
+const HOLDINGS_PATH = path.join(process.cwd(), 'holdings.json');
+
+export default async function handler(req, res) {
+  try {
+    if (!fs.existsSync(HOLDINGS_PATH)) return res.status(500).json({ error: 'holdings.json not found' });
+    const holdings = JSON.parse(fs.readFileSync(HOLDINGS_PATH, 'utf8'));
+
+    const base = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
+    const quotesRes = await fetch(`${base}/api/quotes`);
+    if (!quotesRes.ok) {
+      const txt = await quotesRes.text().catch(()=>null);
+      throw new Error('quotes endpoint failed: ' + txt);
+    }
+    const quotesJson = await quotesRes.json();
+    const quotes = quotesJson.results || [];
+
+    const map = {};
+    quotes.forEach(q => { if (q && q.symbol) map[q.symbol.toUpperCase()] = q; if (q && q.label) map[q.label.toUpperCase()] = q; });
+
+    let nav = 0;
+    let navPrev = 0;
+    const positions = holdings.map(h => {
+      const sym = (h.symbol || h.label || '').toString().toUpperCase();
+      const q = map[sym] || null;
+      const price = q && q.price !== null ? Number(q.price) : null;
+      const changePct = q && q.changePct !== null ? Number(q.changePct) : null;
+      let value = null;
+      let prevCloseValue = null;
+      if (price !== null && typeof h.units === 'number') {
+        value = Number((h.units * price).toFixed(2));
+        if (changePct !== null && Math.abs(changePct) < 1000) {
+          const prev = price / (1 + (changePct / 100));
+          prevCloseValue = Number((h.units * prev).toFixed(2));
+        }
+        if (value) nav += value;
+        if (prevCloseValue) navPrev += prevCloseValue;
+      }
+      return { symbol: sym, label: h.label || sym, units: h.units || null, price, changePct, value, prevCloseValue };
+    });
+
+    const dailyChangeAbs = navPrev ? Number((nav - navPrev).toFixed(2)) : null;
+    const dailyChangePct = navPrev ? Number(((nav - navPrev)/navPrev * 100).toFixed(2)) : null;
+    const portfolioIndex = navPrev ? Number((1000 * (nav / navPrev)).toFixed(2)) : null;
+
+    const payload = { ts: Date.now(), nav: nav || null, navPrev: navPrev || null, dailyChangeAbs, dailyChangePct, portfolioIndex, positions };
+
+    res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
+    return res.status(200).json(payload);
+  } catch (err) {
+    console.error('portfolio error', err);
+    return res.status(500).json({ error: 'portfolio error', details: err.message });
+  }
+}
