@@ -11,10 +11,10 @@ const SYMBOLS = [
   { symbol: '^HSI', label: 'Hang Seng' },
 
   // Commodities (futures tickers on Yahoo)
-  { symbol: 'GC=F', label: 'Gold (futures)' },
-  { symbol: 'SI=F', label: 'Silver (futures)' },
-  { symbol: 'HG=F', label: 'Copper (futures)' },
-  { symbol: 'CL=F', label: 'Crude Oil (futures)' }
+  { symbol: 'GC=F', label: 'Gold' },
+  { symbol: 'SI=F', label: 'Silver' },
+  { symbol: 'HG=F', label: 'Copper' },
+  { symbol: 'CL=F', label: 'Crude Oil' }
 ];
 
 export default async function handler(req, res) {
