@@ -2,149 +2,127 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Wehold — Inversión directa</title>
-
-  <!-- Fonts + libs -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wehold — Market Ticker</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.31/bundled/lenis.min.js"></script>
-
   <style>
     :root{
       --burgundy:#7A1523;
-      --midnight:#0A1F44;
-      --bluesteel:#B0B7C3;
-      --white:#ffffff;
+      --white:#FFFFFF;
       --wehold-gold:#D4AF37;
+      --muted:#B0B7C3;
     }
     *{box-sizing:border-box}
-    body{font-family:'Montserrat',sans-serif;margin:0;background:var(--white);color:var(--midnight);-webkit-font-smoothing:antialiased}
-    a{color:inherit}
+    body{margin:0;font-family:'Montserrat',sans-serif;background:#fff;color:#0A1F44}
+    header{height:72px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;background:transparent;z-index:50}
+    .logo{font-weight:700;color:var(--burgundy);font-size:20px}
 
-    /* Header */
-    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:160;padding:0 20px;background:transparent}
-    .nav{max-width:1180px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
-    .logo-text{font-weight:700;color:var(--burgundy);font-size:22px}
-    nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
-    .actions{display:flex;gap:12px;align-items:center}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(10,31,68,0.06);background:transparent;cursor:pointer;font-weight:700}
-    .btn.primary{background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white);border:none}
-
-    /* main spacing (leave place for ticker) */
-    main{margin-top:116px;min-height:calc(100vh - 116px);overflow-y:auto}
-
-    /* ticker */
-    .ticker-wrap{position:sticky;top:72px;z-index:150;background:var(--burgundy);height:44px;display:flex;align-items:center;padding-left:8px;overflow:hidden;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
-    .ticker{display:flex;align-items:center;white-space:nowrap;will-change:transform;transition:opacity .25s linear}
-    .ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 16px;font-weight:500;color:#fff;font-size:14px;border-left:1px solid rgba(255,255,255,0.06)}
-    .symbol{font-weight:700}
-    .price{min-width:80px;text-align:right;font-weight:700}
+    /* Ticker wrapper */
+    .ticker-wrap{
+      position:sticky;
+      top:72px;
+      z-index:60;
+      background:var(--burgundy);
+      height:44px;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      padding-left:8px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .ticker{
+      display:flex;
+      align-items:center;
+      white-space:nowrap;
+      will-change:transform;
+      transition:opacity .25s linear;
+      transform: translateX(0);
+    }
+    .ticker-item{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:0 16px;
+      font-weight:500;
+      color:var(--white);
+      font-size:14px;
+      border-left:1px solid rgba(255,255,255,0.06);
+    }
+    .ticker-item .symbol{font-weight:700}
+    .ticker-item .price{min-width:80px;text-align:right;font-weight:700}
     .chg{margin-left:10px;min-width:64px;text-align:right;display:flex;gap:6px;align-items:center;justify-content:flex-end}
     .chg.up{color:#1fb97a}.chg.down{color:#ff6b6b}.chg.flat{color:#cbd5e1}
 
-    .ticker-item.wehold{color:var(--wehold-gold)}
-    .ticker-item.wehold .symbol{color:var(--wehold-gold);font-weight:800}
-    .ticker-item.wehold .price{background:rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px;color:var(--white);font-weight:800}
-
     @keyframes ticker-scroll { from{transform:translateX(0)} to{transform:translateX(calc(var(--scrollWidth) * -1))} }
 
-    /* responsive tweaks */
-    @media(max-width:640px){.ticker-item{padding:0 10px;font-size:13px}.ticker-wrap{height:36px}}
+    /* responsive */
+    @media (max-width:640px){
+      .ticker-item{padding:0 10px;font-size:13px}
+      .ticker-item .price{min-width:64px}
+    }
+
+    /* page content placeholder */
+    main{padding:28px}
+    .note{color:var(--muted);font-size:14px}
   </style>
 </head>
 <body>
   <header>
-    <div class="nav">
-      <div class="logo-text">Wehold.</div>
-
-      <nav>
-        <ul>
-          <li><a href="#home">Inicio</a></li>
-          <li><a href="#how">Cómo funciona</a></li>
-          <li><a href="#philosophy">Filosofía</a></li>
-          <li><a href="#strategy">Números</a></li>
-          <li><a href="#team">Equipo</a></li>
-          <li><a href="#letters">Cartas</a></li>
-        </ul>
-      </nav>
-
-      <div class="actions">
-        <!-- hemos eliminado el widget pequeño que estaba al lado de "Solicitar demo" -->
-        <button class="btn" id="btn-demo">Solicitar demo</button>
-        <button class="btn primary" id="btn-start">Empieza hoy</button>
-      </div>
-    </div>
+    <div class="logo">Wehold</div>
   </header>
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
+  <div class="ticker-wrap" aria-hidden="false">
     <div id="ticker" class="ticker" role="list" aria-label="Market ticker"></div>
   </div>
 
   <main>
-    <!-- --- (resto de tu contenido: hero, features, how, philosophy, strategy, team, letters) --- -->
-    <section id="home" style="padding:80px 24px 120px;max-width:1180px;margin:0 auto">
-      <h1>Invirtiendo distinto.<br/>Creando valor real.</h1>
-      <p style="color:var(--bluesteel)">Liquidez inmediata. Accionista directo. Transparencia en cada paso.</p>
-    </section>
-
-    <!-- (las demás secciones se quedan como estaban; las omitimos aquí para brevedad) -->
-
+    <h2>Barra de índices y commodities</h2>
+    <p class="note">Datos públicos tomados desde Yahoo Finance (sin API key). Polling cada 30 s; el endpoint está cacheado 30 s en la CDN.</p>
   </main>
 
-  <footer style="padding:28px;text-align:center;color:var(--bluesteel)">© <span id="year"></span> Wehold</footer>
-
-  <script>
-  // set year
-  document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-
-  <!-- TICKER client: poll /api/quotes + /api/portfolio cada 15s; suaviza reemplazo con fade -->
   <script>
   (function(){
     const T = document.getElementById('ticker');
-    const POLL_INTERVAL = 15000; // 15s to avoid rate limits
+    const POLL_INTERVAL = 30000; // 30s, recomendado para evitar exceso de llamadas
     const SPEED_PX_PER_SEC = 60;
     let poller = null;
 
-    function createItem(label, price, changePct, isWehold=false){
+    function createItem(label, price, changePct){
       const item = document.createElement('div');
-      item.className = 'ticker-item' + (isWehold ? ' wehold' : '');
-      const priceText = (price === null || price === undefined) ? '—' : (isWehold ? `${price > 0 ? '+' : ''}${Number(price).toFixed(2)}%` : Number(price).toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}));
-      let change = changePct;
+      item.className = 'ticker-item';
+      const priceText = (price === null || price === undefined) ? '—' : Number(price).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
       let chClass = 'flat';
       let arrow = '→';
-      if(typeof change === 'number'){
-        if(change > 0.01){ chClass='up'; arrow='▲'; }
-        else if(change < -0.01){ chClass='down'; arrow='▼'; }
+      if(typeof changePct === 'number'){
+        if (changePct > 0.01){ chClass='up'; arrow='▲'; }
+        else if (changePct < -0.01){ chClass='down'; arrow='▼'; }
       }
-      item.innerHTML = `<span class="symbol">${label}</span><span class="price">${priceText}</span><span class="chg ${chClass}"><span class="arrow">${arrow}</span><span class="pct">${(typeof change==='number' && !isWehold) ? ((change>0?'+':'')+change+'%') : ''}</span></span>`;
+      const pctHtml = (typeof changePct === 'number') ? `<span class="pct">${(changePct>0?'+':'')+changePct+'%'}</span>` : `<span class="pct"></span>`;
+      item.innerHTML = `<span class="symbol">${label}</span><span class="price">${priceText}</span><span class="chg ${chClass}"><span class="arrow">${arrow}</span>${pctHtml}</span>`;
       return item;
     }
 
-    function buildDOM(items){
-      // build fragment
+    function buildFragment(items){
       const frag = document.createDocumentFragment();
-      items.forEach(it => frag.appendChild(createItem(it.label,it.price,it.changePct,it.isWehold)));
+      items.forEach(it => frag.appendChild(createItem(it.label, it.price, it.changePct)));
+      // duplicate for seamless scroll
       const clone = frag.cloneNode(true);
-      // Return combined frag (original + clone) to enable seamless loop
       const wrapper = document.createDocumentFragment();
       wrapper.appendChild(frag);
       wrapper.appendChild(clone);
       return wrapper;
     }
 
-    function animateTickerAfterDOM(){
-      // compute half width and set CSS animation
+    function startAnimation(){
+      // reset transform so it starts from left
+      T.style.transform = 'translateX(0px)';
       requestAnimationFrame(()=>{
         const totalWidth = T.scrollWidth;
         const half = totalWidth / 2;
-        if(!half || half === Infinity) return;
+        if(!half || !isFinite(half)) return;
         T.style.setProperty('--scrollWidth', half + 'px');
         const duration = Math.max(12, Math.round(half / SPEED_PX_PER_SEC));
-        // restart animation
         T.style.animation = 'none';
         void T.offsetWidth;
         T.style.animation = `ticker-scroll ${duration}s linear infinite`;
@@ -152,75 +130,55 @@
       });
     }
 
-    async function fetchAndUpdate(){
+    async function fetchAndRender(){
       try{
-        const [quotesRes, portRes] = await Promise.all([
-          fetch('/api/quotes').then(r=> r.ok ? r.json() : Promise.reject('quotes fail')).catch(()=>null),
-          fetch('/api/portfolio').then(r=> r.ok ? r.json() : Promise.reject('portfolio fail')).catch(()=>null)
-        ]);
+        const r = await fetch('/api/quotes');
+        if(!r.ok) throw new Error('quotes failed');
+        const j = await r.json();
+        const rows = (j && Array.isArray(j.results)) ? j.results : [];
 
-        const quotes = (quotesRes && quotesRes.results) ? quotesRes.results : [];
-        const items = [];
+        // map to items: label, price, changePct
+        const items = rows.map(x => ({ label: x.label, price: x.price, changePct: x.changePct }));
 
-        // Wehold: show day-to-day variation as percentage (dailyChangePct)
-        if(portRes && typeof portRes.dailyChangePct === 'number'){
-          items.push({ label:'Wehold', price: portRes.dailyChangePct, changePct: portRes.dailyChangePct, isWehold:true });
-        } else if(portRes && typeof portRes.portfolioIndex === 'number'){
-          // fallback: if older API, convert index to pct approx (not ideal)
-          items.push({ label:'Wehold', price: 0, changePct: 0, isWehold:true });
-        }
-
-        // Add other indices from quotes
-        quotes.forEach(q=>{
-          items.push({ label: q.label || q.symbol, price: q.price, changePct: q.changePct, isWehold:false });
-        });
-
-        // If nothing, fallback mock
+        // fallback
         if(items.length === 0){
-          items.push({ label:'Wehold', price:0.00, changePct:0, isWehold:true });
-          items.push({ label:'S&P 500', price:4500.12, changePct:0.34, isWehold:false });
+          items.push({ label:'S&P 500', price:4500.12, changePct:0.34 });
+          items.push({ label:'Gold (futures)', price:2000.12, changePct:-0.28 });
         }
 
-        // Fade ticker out, replace DOM, fade in — reduces abrupt jump look
+        // fade out -> replace -> fade in
         T.style.opacity = '0';
         setTimeout(()=>{
-          // clear and append new content
           T.innerHTML = '';
-          const frag = buildDOM(items);
-          T.appendChild(frag);
-          // start animation after small delay
-          animateTickerAfterDOM();
-        }, 260); // match CSS transition .25s
+          T.appendChild(buildFragment(items));
+          startAnimation();
+        }, 260);
 
-      }catch(err){
-        console.warn('ticker update failed', err);
-        // fallback: build simple mock
+      } catch(err){
+        console.warn('ticker error', err);
         T.style.opacity = '0';
         setTimeout(()=>{
           T.innerHTML = '';
           const mock = [
-            {label:'Wehold', price:0.00, changePct:0, isWehold:true},
-            {label:'S&P 500', price:4500.12, changePct:0.34, isWehold:false},
-            {label:'BTC', price:42000.12, changePct:-1.35, isWehold:false}
+            { label:'S&P 500', price:4500.12, changePct:0.34 },
+            { label:'Gold (futures)', price:2000.12, changePct:-0.28 }
           ];
-          T.appendChild(buildDOM(mock));
-          animateTickerAfterDOM();
+          T.appendChild(buildFragment(mock));
+          startAnimation();
         },260);
       }
     }
 
-    // initial
-    fetchAndUpdate();
-    poller = setInterval(fetchAndUpdate, POLL_INTERVAL);
+    // initial + poll
+    fetchAndRender();
+    poller = setInterval(fetchAndRender, POLL_INTERVAL);
 
-    // cleanup/responsive
     window.addEventListener('resize', ()=> {
       if(window._tickerResizeTO) clearTimeout(window._tickerResizeTO);
-      window._tickerResizeTO = setTimeout(()=> fetchAndUpdate(), 300);
+      window._tickerResizeTO = setTimeout(()=> fetchAndRender(), 300);
     });
     window.addEventListener('beforeunload', ()=> clearInterval(poller));
   })();
   </script>
 </body>
 </html>
-
