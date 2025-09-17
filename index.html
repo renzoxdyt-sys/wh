@@ -13,71 +13,93 @@
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.31/bundled/lenis.min.js"></script>
 
   <style>
+    /* Wehold brand palette (Pantone + values provided)
+       Burgundy (Pantone 1955 C)   -> #7A1523
+       Midnight Blue (Pantone 2767 C) -> #0A1F44
+       Blue Steel (Pantone 429 C) -> #B0B7C3
+       White -> #FFFFFF
+       Black -> #000000
+    */
     :root{
-      --page-bg: #ffffff;
-      --page-text: #0f1724;
-      --muted:#667085;
-      --primary:#0b2545;
-      --accent1:#0066ff;
-      --accent2:#00d4ff;
+      --burgundy: #7A1523; /* RGB 122-21-35 */
+      --midnight: #0A1F44; /* RGB 10-31-68 */
+      --bluesteel: #B0B7C3; /* RGB 176-183-195 */
+      --white: #FFFFFF;
+      --black: #000000;
+
+      /* derived */
+      --bg: var(--white);
+      --text: var(--midnight);
+      --muted: #6b7280;
+      --accent: var(--burgundy);
+      --accent-2: var(--midnight);
+
       --container:1180px;
       --radius:14px;
       --ease:cubic-bezier(.2,.9,.2,1);
     }
+
     *{box-sizing:border-box}
-    html,body,#root{height:100%;}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--page-bg);color:var(--page-text);-webkit-font-smoothing:antialiased;transition:background .6s var(--ease),color .6s var(--ease)}
+    html,body,#root{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;transition:background .6s var(--ease),color .6s var(--ease)}
     a{text-decoration:none;color:inherit}
 
     .site{min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
-    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:120;padding:0 20px;pointer-events:auto}
+    header{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;z-index:120;padding:0 20px}
     .nav{max-width:var(--container);margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
-    .logo{display:flex;align-items:center;gap:12px;font-weight:700}
-    .mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(180deg,var(--primary),#053357);box-shadow:0 6px 22px rgba(11,37,69,0.08)}
+    .logo{display:flex;align-items:center;gap:12px;font-weight:800}
+    .mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(180deg,var(--burgundy),var(--midnight));box-shadow:0 8px 30px rgba(10,31,68,0.12)}
     nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{font-weight:600;font-size:15px;color:var(--page-text);opacity:.95;padding:8px 12px;border-radius:8px}
-    nav a.active{background:rgba(255,255,255,0.06)}
-    .actions{display:flex;gap:10px;align-items:center}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,36,0.06);background:transparent;cursor:pointer;font-weight:600}
-    .btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;border:none}
+    nav a{font-weight:600;font-size:15px;color:var(--text);opacity:.95;padding:8px 12px;border-radius:8px}
+    nav a.active{background:rgba(10,31,68,0.06)}
+    .actions{display:flex;gap:12px;align-items:center}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(10,31,68,0.06);background:transparent;cursor:pointer;font-weight:700}
+    .btn.primary{background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white);border:none;box-shadow:0 12px 30px rgba(122,21,35,0.08)}
 
-    /* MAIN scroll area controlled by Lenis (or native fallback) */
+    /* MAIN area */
     main{flex:1;height:100vh;overflow-y:auto;scroll-behavior:smooth}
     section{min-height:100vh;display:flex;align-items:center;padding:100px 24px}
     .container{max-width:var(--container);margin:0 auto;width:100%}
 
     /* Hero */
-    .hero h1{font-size:64px;line-height:1.02;margin:0 0 18px;font-weight:800}
-    .eyebrow{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
-    .lead{max-width:62ch;font-size:18px;color:var(--muted);margin-bottom:26px}
+    .eyebrow{font-size:13px;color:var(--midnight);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;font-weight:600}
+    .hero h1{font-size:64px;line-height:1.02;margin:0 0 18px;font-weight:800;color:var(--midnight)}
+    .lead{max-width:62ch;font-size:18px;color:var(--bluesteel);margin-bottom:26px}
     .hero-grid{display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:center}
-    .visual-card{border-radius:18px;padding:18px;background:linear-gradient(180deg,rgba(0,212,255,0.04),rgba(0,102,255,0.02));box-shadow:0 20px 40px rgba(11,37,69,0.06)}
+    .visual-card{border-radius:18px;padding:18px;background:linear-gradient(180deg,rgba(122,21,35,0.04),rgba(10,31,68,0.02));box-shadow:0 20px 40px rgba(10,31,68,0.06)}
 
-    /* Feature row */
+    /* Features */
     .features-row{display:flex;gap:18px;align-items:stretch}
-    .feature{flex:1;padding:22px;border-radius:12px;background:rgba(255,255,255,0.92);backdrop-filter:blur(2px);border:1px solid rgba(11,37,69,0.03)}
+    .feature{flex:1;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(240,242,245,0.98));border:1px solid rgba(10,31,68,0.04);transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
+    .feature:hover{transform:translateY(-6px);box-shadow:0 24px 40px rgba(10,31,68,0.06)}
+    .feature h4{margin:0 0 8px;color:var(--midnight)}
+    .feature p{margin:0;color:var(--bluesteel)}
 
     /* Steps */
     .how .track{display:flex;gap:18px}
-    .step{flex:1;padding:20px;border-radius:12px;background:rgba(255,255,255,0.92);box-shadow:0 10px 30px rgba(11,37,69,0.04);text-align:center}
+    .step{flex:1;padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);box-shadow:0 10px 30px rgba(10,31,68,0.04);text-align:center}
+    .step .num{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));display:inline-flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;margin-bottom:12px}
 
     /* Metrics */
     .metrics .row{display:flex;gap:16px}
-    .metric{flex:1;padding:18px;border-radius:12px;color:white;background:linear-gradient(180deg,#0b2545,#083049);text-align:center}
+    .metric{flex:1;padding:18px;border-radius:12px;color:var(--white);background:linear-gradient(180deg,var(--midnight),rgba(10,31,68,0.85));text-align:center}
 
     /* Team */
     .team .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .member{padding:12px;border-radius:12px;background:rgba(255,255,255,0.92);display:flex;gap:12px;align-items:center}
+    .member{padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);display:flex;gap:12px;align-items:center}
+    .avatar{width:64px;height:64px;border-radius:10px;background:linear-gradient(180deg,var(--bluesteel),#eef3fb);}
 
-    /* CTA band */
-    .cta-band{margin:48px auto;padding:32px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white}
+    /* Cartas trimestrales */
+    #lettersList .item{padding:12px;border-radius:10px;border:1px solid rgba(10,31,68,0.04);margin-bottom:10px;background:linear-gradient(180deg,#fff,#fbfcff)}
+    #lettersList .item a{color:var(--midnight);font-weight:700}
+
+    .cta-band{margin:48px auto;padding:32px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(90deg,var(--burgundy),var(--midnight));color:var(--white)}
 
     .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
     .reveal.show{opacity:1;transform:none}
 
     @media (max-width:980px){.hero-grid{grid-template-columns:1fr}nav ul{display:none}}
     @media (max-width:520px){.hero h1{font-size:34px}.team .grid{grid-template-columns:1fr}.features-row{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.feature{min-width:260px;scroll-snap-align:center}.cta-band{flex-direction:column;text-align:center}}
-
     @media (prefers-reduced-motion: reduce){.reveal{transition:none;opacity:1;transform:none}body{transition:none}}
 
   </style>
@@ -86,7 +108,7 @@
   <div class="site">
     <header id="site-header">
       <div class="nav">
-        <div class="logo"><span class="mark" aria-hidden></span><span>Wehold</span></div>
+        <div class="logo"><span class="mark" aria-hidden></span><span style="font-size:18px">Wehold</span></div>
         <nav>
           <ul>
             <li><a href="#home">Inicio</a></li>
@@ -103,7 +125,6 @@
     </header>
 
     <main id="main-scroll">
-      <!-- Sections with data attributes that we will animate via GSAP/ScrollTrigger -->
       <section id="home" data-bg="#ffffff" data-contrast="light">
         <div class="container hero-grid">
           <div>
@@ -114,14 +135,13 @@
               <button class="btn primary" id="hero-primary">Empieza hoy</button>
               <button class="btn" id="hero-secondary">Cómo funciona</button>
             </div>
-            <div class="subtle reveal" style="margin-top:12px;color:var(--muted)">Invertir implica riesgo. <a href="#legal">Lee nuestros términos</a>.</div>
+            <div class="subtle reveal" style="margin-top:12px;color:var(--bluesteel)">Invertir implica riesgo. <a href="#legal">Lee nuestros términos</a>.</div>
           </div>
           <div class="visual-card reveal" aria-hidden>
-            <div style="height:320px;border-radius:12px;background:linear-gradient(180deg,#fff,#f6fbff);display:flex;align-items:center;justify-content:center;border:1px solid rgba(11,37,69,0.04)">
-              <!-- Lottie/Canvas placeholder: replace with an actual Lottie or Chart.js animation file -->
+            <div style="height:320px;border-radius:12px;background:linear-gradient(180deg,#fff,#f6fbff);display:flex;align-items:center;justify-content:center;border:1px solid rgba(10,31,68,0.04)">
               <svg width="320" height="200" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <rect width="320" height="200" rx="12" fill="url(#g)" stroke="rgba(11,37,69,0.04)"/>
-                <path id="spark" d="M18 150 L60 110 L110 120 L160 80 L210 100 L260 60 L300 90" stroke="#0066ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <rect width="320" height="200" rx="12" fill="url(#g)" stroke="rgba(10,31,68,0.04)"/>
+                <path id="spark" d="M18 150 L60 110 L110 120 L160 80 L210 100 L260 60 L300 90" stroke="var(--burgundy)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                 <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5fbff"/></linearGradient></defs>
               </svg>
             </div>
@@ -135,21 +155,21 @@
             <h3 class="reveal">Por qué Wehold</h3>
           </div>
           <div class="features-row">
-            <div class="feature reveal"><h4>Equity directo</h4><p style="color:var(--muted)">Tu capital participa en compañías reales —sin intermediarios que diluyan incentivos.</p></div>
-            <div class="feature reveal"><h4>Liquidez controlada</h4><p style="color:var(--muted)">Mecanismos que te permiten salida sin esperar cierres largos de fondo.</p></div>
-            <div class="feature reveal"><h4>Modelo alineado</h4><p style="color:var(--muted)">Cobramos por rendimiento —si y sólo si entregamos valor a tus inversiones.</p></div>
+            <div class="feature reveal"><h4>Equity directo</h4><p>Tu capital participa en compañías reales —sin intermediarios que diluyan incentivos.</p></div>
+            <div class="feature reveal"><h4>Liquidez controlada</h4><p>Mecanismos que te permiten salida sin esperar cierres largos de fondo.</p></div>
+            <div class="feature reveal"><h4>Modelo alineado</h4><p>Cobramos por rendimiento —si y sólo si entregamos valor a tus inversiones.</p></div>
           </div>
         </div>
       </section>
 
-      <section id="how" data-bg="#001f3f" data-contrast="dark">
+      <section id="how" data-bg="#0A1F44" data-contrast="dark">
         <div class="container">
-          <h3 class="reveal" style="color:var(--page-text)">Cómo funciona</h3>
+          <h3 class="reveal" style="color:var(--white)">Cómo funciona</h3>
           <div class="how">
             <div class="track" style="display:flex;gap:18px;margin-top:18px">
-              <div class="step reveal"><div class="num">1</div><h5 style="margin:8px 0;color:var(--page-text)">Abrir cuenta</h5><p style="color:rgba(255,255,255,0.85)">Registro rápido con verificación segura.</p></div>
-              <div class="step reveal"><div class="num">2</div><h5 style="margin:8px 0;color:var(--page-text)">Seleccionar</h5><p style="color:rgba(255,255,255,0.85)">Oportunidades curadas por nuestro equipo de inversión.</p></div>
-              <div class="step reveal"><div class="num">3</div><h5 style="margin:8px 0;color:var(--page-text)">Invertir</h5><p style="color:rgba(255,255,255,0.85)">Transparencia, seguimiento y opciones de liquidez.</p></div>
+              <div class="step reveal"><div class="num">1</div><h5 style="margin:8px 0;color:var(--white)">Abrir cuenta</h5><p style="color:rgba(255,255,255,0.85)">Registro rápido con verificación segura.</p></div>
+              <div class="step reveal"><div class="num">2</div><h5 style="margin:8px 0;color:var(--white)">Seleccionar</h5><p style="color:rgba(255,255,255,0.85)">Oportunidades curadas por nuestro equipo de inversión.</p></div>
+              <div class="step reveal"><div class="num">3</div><h5 style="margin:8px 0;color:var(--white)">Invertir</h5><p style="color:rgba(255,255,255,0.85)">Transparencia, seguimiento y opciones de liquidez.</p></div>
             </div>
           </div>
         </div>
@@ -158,10 +178,25 @@
       <section id="strategy" data-bg="#f8fafc" data-contrast="light">
         <div class="container">
           <div style="display:flex;gap:16px;align-items:stretch">
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,#0b2545,#083049);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">$120M</div><div>Activos administrados</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,#0b2545,#083049);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">+24%</div><div>Performance vs S&P (último año)</div></div>
-            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,#0b2545,#083049);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">2019</div><div>Año fundación</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">$120M</div><div>Activos administrados</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">+24%</div><div>Performance vs S&P (último año)</div></div>
+            <div class="metric reveal" style="flex:1;background:linear-gradient(180deg,var(--midnight),#092243);color:white;border-radius:12px;padding:20px;text-align:center"><div class="big">2019</div><div>Año fundación</div></div>
           </div>
+        </div>
+      </section>
+
+      <section id="letters" data-bg="#ffffff" data-contrast="light">
+        <div class="container">
+          <h3 class="reveal">Cartas trimestrales</h3>
+          <div id="admin-upload" style="margin:16px 0;">
+            <input id="fileInput" type="file" accept="application/pdf" />
+            <input id="titleInput" placeholder="Título (ej: Carta Q1 2025)" style="margin-left:8px"/>
+            <input id="quarterInput" placeholder="Trimestre (ej: Q1 2025)" style="margin-left:8px"/>
+            <button id="uploadBtn" class="btn">Subir</button>
+            <small id="uploadMsg" style="display:block;color:var(--bluesteel);margin-top:8px"></small>
+          </div>
+
+          <div id="lettersList"></div>
         </div>
       </section>
 
@@ -170,18 +205,18 @@
           <h3 class="reveal" style="text-align:center;margin-bottom:18px">Equipo</h3>
           <div class="team">
             <div class="grid">
-              <div class="member reveal"><div class="avatar"></div><div><strong>Renzo Franco</strong><div style="color:var(--muted);font-size:13px">CEO & Fundador</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>María Pérez</strong><div style="color:var(--muted);font-size:13px">Head Inversiones</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Carlos Ruiz</strong><div style="color:var(--muted);font-size:13px">Ops & Compliance</div></div></div>
-              <div class="member reveal"><div class="avatar"></div><div><strong>Luisa Gómez</strong><div style="color:var(--muted);font-size:13px">Marketing</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>Renzo Franco</strong><div style="color:var(--bluesteel);font-size:13px">CEO & Fundador</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>María Pérez</strong><div style="color:var(--bluesteel);font-size:13px">Head Inversiones</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>Carlos Ruiz</strong><div style="color:var(--bluesteel);font-size:13px">Ops & Compliance</div></div></div>
+              <div class="member reveal"><div class="avatar"></div><div><strong>Luisa Gómez</strong><div style="color:var(--bluesteel);font-size:13px">Marketing</div></div></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="cta" data-bg="#0b2545" data-contrast="dark">
+      <section id="cta" data-bg="#0A1F44" data-contrast="dark">
         <div class="container cta-band" style="border-radius:12px">
-          <h3 style="margin:0;color:var(--page-text)">Tu inversión, siempre disponible. Hazla crecer con Wehold.</h3>
+          <h3 style="margin:0;color:var(--white)">Tu inversión, siempre disponible. Hazla crecer con Wehold.</h3>
           <div>
             <button class="btn" id="band-contact">Solicitar contacto</button>
             <button class="btn primary" id="band-start">Empieza hoy</button>
@@ -191,9 +226,9 @@
 
     </main>
 
-    <footer style="padding:28px 24px;border-top:1px solid rgba(11,37,69,0.04)">
+    <footer style="padding:28px 24px;border-top:1px solid rgba(10,31,68,0.04)">
       <div style="max-width:var(--container);margin:0 auto;display:flex;justify-content:space-between;align-items:center">
-        <small style="color:var(--muted)">&copy; <span id="year"></span> Wehold • Invertir implica riesgo.</small>
+        <small style="color:var(--bluesteel)">&copy; <span id="year"></span> Wehold • Invertir implica riesgo.</small>
         <div style="display:flex;gap:14px;align-items:center"><a href="#legal">Términos</a><a href="mailto:contacto@wehold.com">contacto@wehold.com</a></div>
       </div>
     </footer>
@@ -203,7 +238,7 @@
   <!-- Minimal contact modal -->
   <div id="modal" aria-hidden style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;visibility:hidden">
     <div id="backdrop" style="position:absolute;inset:0;background:rgba(10,12,20,0.45)"></div>
-    <div style="position:relative;z-index:90;background:white;border-radius:14px;padding:22px;max-width:640px;width:100%">
+    <div style="position:relative;z-index:90;background:var(--white);border-radius:14px;padding:22px;max-width:640px;width:100%">
       <button id="close" style="position:absolute;right:12px;top:12px;border:0;background:transparent;font-size:18px;cursor:pointer">✕</button>
       <h4>Solicitar contacto</h4>
       <form id="form" style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
@@ -220,43 +255,22 @@
   </div>
 
   <script>
-    // small helpers and robust Lenis handling
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Use window as scroller target for Lenis/ScrollTrigger (simpler and more reliable)
-    const scroller = window;
+    // GSAP + Lenis setup (robust fallback)
     const header = document.getElementById('site-header');
+    function updateHeaderState(y){ if(y>20) header.classList.add('scrolled'); else header.classList.remove('scrolled'); }
 
-    function updateHeaderState(scrollY){
-      if(scrollY > 20) header.classList.add('scrolled'); else header.classList.remove('scrolled');
-    }
+    if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
-    // Register GSAP plugins
-    if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined'){
-      gsap.registerPlugin(ScrollTrigger);
-    } else {
-      console.warn('GSAP or ScrollTrigger not available');
-    }
-
-    // Lenis (smooth-scrolling) initialization with graceful fallback
-    let lenis = null;
-    let usingLenis = false;
-
+    let lenis, usingLenis = false;
     function initScrolling(){
       if(typeof Lenis !== 'undefined'){
         try{
-          lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true,
-            direction: 'vertical'
-          });
-
-          // RAF loop
-          function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+          lenis = new Lenis({ duration:1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth:true, direction:'vertical' });
+          function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
           requestAnimationFrame(raf);
 
-          // proxy ScrollTrigger to use Lenis (window-based)
           if(typeof ScrollTrigger !== 'undefined'){
             ScrollTrigger.scrollerProxy(window, {
               scrollTop(value){ if(arguments.length){ lenis.scrollTo(value); return; } return window.scrollY; },
@@ -264,111 +278,73 @@
               pinType: document.body.style.transform ? 'transform' : 'fixed'
             });
             lenis.on('scroll', ScrollTrigger.update);
-            // update header through Lenis events
-            try{ lenis.on('scroll', (e)=> updateHeaderState((e && e.scroll) || window.scrollY)); }catch(e){ window.addEventListener('scroll', ()=> updateHeaderState(window.scrollY)); }
+            lenis.on('scroll', (e)=> updateHeaderState((e && e.scroll) || window.scrollY));
             usingLenis = true;
           }
-        }catch(err){ console.warn('Lenis init failed', err); usingLenis = false; }
+        }catch(e){ console.warn('Lenis init failed', e); usingLenis = false; }
       }
-
-      if(!usingLenis){
-        // fallback: native scroll
-        window.addEventListener('scroll', ()=>{ updateHeaderState(window.scrollY); if(typeof ScrollTrigger !== 'undefined') ScrollTrigger.update(); });
-      }
-
-      // refresh ScrollTrigger
+      if(!usingLenis){ window.addEventListener('scroll', ()=> updateHeaderState(window.scrollY)); }
       setTimeout(()=>{ if(typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); }, 120);
     }
-
     initScrolling();
 
-    // GSAP reveal animations
-    (function setupReveals(){
-      const reveals = document.querySelectorAll('.reveal');
-      reveals.forEach(el=>{
-        try{
-          gsap.fromTo(el, {y: 18, autoAlpha:0}, {y:0, autoAlpha:1, duration:0.7, ease: 'power3.out', scrollTrigger:{trigger: el, start:'top 80%'}});
-        }catch(e){ el.classList.add('show'); }
+    // reveals
+    try{
+      document.querySelectorAll('.reveal').forEach(el=>{
+        gsap.fromTo(el, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, duration:0.7, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 80%'}});
       });
-    })();
+    }catch(e){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show')); }
 
-    // Section backgrounds / color changes
-    (function setupSectionBackgrounds(){
-      try{
-        const sections = document.querySelectorAll('section[data-bg]');
-        sections.forEach(sec=>{
-          const bg = sec.dataset.bg || '#ffffff';
-          const contrast = sec.dataset.contrast || 'light';
-          if(typeof ScrollTrigger !== 'undefined'){
-            ScrollTrigger.create({
-              trigger: sec,
-              start: 'top center',
-              end: 'bottom center',
-              onEnter: ()=> gsap.to(document.body, {backgroundColor: bg, color: contrast === 'dark' ? '#ffffff' : '#0f1724', duration: 0.6}),
-              onEnterBack: ()=> gsap.to(document.body, {backgroundColor: bg, color: contrast === 'dark' ? '#ffffff' : '#0f1724', duration: 0.6})
-            });
-          } else {
-            // fallback: set initial background for first section
-            if(sec.id === 'home'){ document.body.style.backgroundColor = bg; document.body.style.color = contrast === 'dark' ? '#ffffff' : '#0f1724'; }
-          }
-        });
-      }catch(e){ console.warn('Section bg setup failed', e); }
-    })();
+    // section bg transitions
+    try{
+      document.querySelectorAll('section[data-bg]').forEach(sec=>{
+        const bg = sec.dataset.bg; const contrast = sec.dataset.contrast;
+        ScrollTrigger.create({ trigger:sec, start:'top center', end:'bottom center', onEnter:()=> gsap.to(document.body,{backgroundColor:bg, color: contrast==='dark'? '--white' : '--midnight', duration:0.5}), onEnterBack:()=> gsap.to(document.body,{backgroundColor:bg, color: contrast==='dark'? '--white' : '--midnight', duration:0.5}) });
+      });
+    }catch(e){/* skip */}
 
-    // Spark animation
+    // spark animation (hero)
     try{
       const spark = document.getElementById('spark');
-      if(spark && typeof gsap !== 'undefined'){
-        gsap.fromTo(spark, {strokeDasharray: 1000, strokeDashoffset: 1000}, {strokeDashoffset:0, duration:1.8, ease:'power2.out', repeat:-1, yoyo:true, opacity:0.95});
-      }
-    }catch(e){ }
+      if(spark && typeof gsap !== 'undefined') gsap.fromTo(spark, {strokeDasharray:1000, strokeDashoffset:1000}, {strokeDashoffset:0, duration:1.8, ease:'power2.out', repeat:-1, yoyo:true, opacity:0.95});
+    }catch(e){}
 
-    // Nav highlight per section
-    (function navHighlight(){
-      if(typeof ScrollTrigger === 'undefined') return;
-      const sections = document.querySelectorAll('section[data-bg]');
-      const navLinks = document.querySelectorAll('nav a');
-      sections.forEach(sec=>{
-        ScrollTrigger.create({trigger:sec, start:'top center', end:'bottom center', onToggle:self=>{
-          navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+sec.id));
-        }});
-      });
-    })();
+    // letters mock list & upload flow (MVP)
+    async function fetchList(){
+      // mock data while backend isn't ready
+      const mock = [
+        { key: 'quarterly/carta-q2-2025.pdf', title: 'Carta Q2 2025', quarter: 'Q2 2025' },
+        { key: 'quarterly/carta-q1-2025.pdf', title: 'Carta Q1 2025', quarter: 'Q1 2025' }
+      ];
+      const container = document.getElementById('lettersList');
+      container.innerHTML = mock.map(item=>`<div class="item"><strong>${item.title}</strong> — <small>${item.quarter}</small><div style="margin-top:6px"><a href="#">Descargar PDF</a></div></div>`).join('');
+    }
+    fetchList();
 
-    // Modal
+    document.getElementById('uploadBtn').addEventListener('click', async ()=>{
+      const file = document.getElementById('fileInput').files[0];
+      const title = document.getElementById('titleInput').value.trim();
+      const quarter = document.getElementById('quarterInput').value.trim();
+      const msg = document.getElementById('uploadMsg'); msg.textContent='';
+      if(!file){ msg.textContent='Selecciona un PDF.'; return; }
+      if(file.size > 10 * 1024 * 1024){ msg.textContent='Archivo demasiado grande (>10MB).'; return; }
+      if(!title || !quarter){ msg.textContent='Completa título y trimestre.'; return; }
+      // If backend exists we'll call /api/presign and /api/register — for now simulate success
+      msg.textContent = 'Simulación: archivo subido correctamente.';
+      setTimeout(()=>{ msg.textContent = ''; fetchList(); }, 800);
+    });
+
+    // modal & form
     (function modalSetup(){
       const modal = document.getElementById('modal');
       const openBtns = document.querySelectorAll('#btn-demo,#btn-start,#hero-primary,#band-contact,#band-start');
       const closeBtn = document.getElementById('close');
       const cancel = document.getElementById('cancel');
-      openBtns.forEach(b=>b.addEventListener('click', ()=>{modal.style.visibility='visible';modal.setAttribute('aria-hidden','false');}));
+      openBtns.forEach(b=>b.addEventListener('click', ()=>{ modal.style.visibility='visible'; modal.setAttribute('aria-hidden','false'); }));
       function closeModal(){ modal.style.visibility='hidden'; modal.setAttribute('aria-hidden','true'); }
-      closeBtn && closeBtn.addEventListener('click', closeModal);
-      cancel && cancel.addEventListener('click', closeModal);
-      document.getElementById('backdrop') && document.getElementById('backdrop').addEventListener('click', closeModal);
-      const form = document.getElementById('form');
-      form && form.addEventListener('submit',(e)=>{ e.preventDefault(); alert('Gracias — recibimos tu solicitud.'); closeModal(); });
+      closeBtn && closeBtn.addEventListener('click', closeModal); cancel && cancel.addEventListener('click', closeModal); document.getElementById('backdrop') && document.getElementById('backdrop').addEventListener('click', closeModal);
+      const form = document.getElementById('form'); form && form.addEventListener('submit',(e)=>{ e.preventDefault(); alert('Gracias — recibimos tu solicitud.'); closeModal(); });
     })();
-
-    // keyboard nav
-    (function keyboardNav(){
-      try{
-        document.addEventListener('keydown', (e)=>{
-          if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
-            e.preventDefault();
-            const sections = document.querySelectorAll('section[data-bg]');
-            const currentIndex = Array.from(sections).findIndex(s => s.getBoundingClientRect().top >= -10 && s.getBoundingClientRect().top < window.innerHeight/2);
-            let next = currentIndex;
-            if(e.key === 'ArrowDown') next = Math.min(sections.length-1, currentIndex+1);
-            if(e.key === 'ArrowUp') next = Math.max(0, currentIndex-1);
-            sections[next] && sections[next].scrollIntoView({behavior:'smooth'});
-          }
-        });
-      }catch(e){ }
-    })();
-
-    // reduced motion
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ if(typeof gsap !== 'undefined') gsap.globalTimeline.timeScale(3); }
 
   </script>
 </body>
