@@ -1,0 +1,129 @@
+/* Estilos generales */
+:root {
+    --dark-bg: #121212; /* Fondo muy oscuro */
+    --accent-color: #00ffc4; /* Color de detalle brillante para el grid y texto */
+    --text-color: #e0e0e0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+}
+
+/* Estilo de la sección principal (Fondo oscuro con detalles visuales) */
+.investment-process {
+    padding: 50px 5%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    /* Fondo con efecto data-lines/grid animado */
+    background-image: 
+        repeating-linear-gradient(0deg, var(--dark-bg), var(--dark-bg) 98px, rgba(0, 255, 196, 0.05) 100px),
+        repeating-linear-gradient(90deg, var(--dark-bg), var(--dark-bg) 98px, rgba(0, 255, 196, 0.05) 100px);
+    background-size: 100px 100px;
+    animation: grid-scroll 60s linear infinite; /* Animación sutil de desplazamiento del grid */
+}
+
+@keyframes grid-scroll {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -100px -100px;
+    }
+}
+
+h1 {
+    text-align: center;
+    color: var(--accent-color);
+    margin-bottom: 50px;
+    font-size: 2.5em;
+    font-weight: 300;
+}
+
+/* Diseño de cuatro bloques */
+.blocks-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que se adapte en móviles */
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.block {
+    background-color: #1e1e1e; /* Color ligeramente más claro que el fondo */
+    border: 1px solid rgba(0, 255, 196, 0.2);
+    border-radius: 10px;
+    padding: 30px 20px;
+    width: 200px; /* Ancho fijo para desktop, se adaptará con flexbox */
+    text-align: center;
+    flex-grow: 1; /* Permite que crezca para ocupar espacio */
+    max-width: 250px; /* Límite para que no sean demasiado anchos */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 196, 0.2);
+    background-color: #2a2a2a;
+}
+
+.icon {
+    font-size: 3em;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    display: block; /* Asegura que el ícono esté en su propia línea */
+}
+
+.block h2 {
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Estilos para el Flujo y la parte cuantitativa */
+.flow-container, .quant-role {
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 20px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.flow-container h3, .quant-role h3 {
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.flow-container p, .quant-role p {
+    line-height: 1.6;
+}
+
+/* Microcopy (Cita) */
+.microcopy {
+    text-align: center;
+    margin-top: 80px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.microcopy p {
+    font-style: italic;
+    color: #909090;
+    font-size: 0.9em;
+}
+
+/* Adaptación para dispositivos más pequeños */
+@media (max-width: 768px) {
+    .blocks-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .block {
+        width: 80%;
+        max-width: none;
+    }
+}
